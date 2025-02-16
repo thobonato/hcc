@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { User, Search, File, Star, Clock, CircleHelp } from 'lucide-react';
+import { User, Search, File, Star, Clock } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import CursorTooltip from './CursorTooltipHeader';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
@@ -22,8 +24,8 @@ const Header = () => {
   ]);
 
   return (
-    <header className="w-full bg-white border-b">
-      <div className="max-w-screen-xl mx-auto px-4 py-2">
+    <header className="w-full bg-white">
+      <div className="max-w-screen-xl mx-auto p-6">
         <div className="flex items-center justify-between">
           {/* Profile Section */}
           <div className="flex items-center space-x-0">
@@ -34,68 +36,83 @@ const Header = () => {
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="p-2 hover:bg-transparent">
+                <Button size="icon" variant="ghost">
                     <User/>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem>Settings</DropdownMenuItem>
-                <DropdownMenuItem>Payments</DropdownMenuItem>
-                <DropdownMenuItem>Logout</DropdownMenuItem>
+              <DropdownMenuContent align="start" className='bg-fill-secondary gap-0 p-0'>
+                
+                {/* email, this is dynamic eventually */}
+                <DropdownMenuItem className="py-1 text-text-primary hover:bg-fill-secondary">info@fennell.cv</DropdownMenuItem> 
+                <DropdownMenuSeparator className='bg-border-default -mx-0 my-0'/>
+                <DropdownMenuItem className="py-1 text-text-primary hover:bg-fill-secondary">Settings</DropdownMenuItem>
+                <DropdownMenuSeparator className=' -mx-0 my-0'/>
+                <DropdownMenuItem className="py-1 text-text-primary hover:bg-fill-secondary">Payments</DropdownMenuItem>
+                <DropdownMenuSeparator className='bg-border-default -mx-0 my-0'/>
+                <DropdownMenuItem className="py-1 text-text-primary hover:bg-fill-secondary">Logout</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
 
           {/* Actions */}
-          <div className="flex items-center space-x-2">
-            {/* Search */}
-            <Button size="icon" className='bg-gray-100'>
-              <Search className="h-5 w-5" />
-            </Button>
-            
-            {/* New Chat */}
-            <Button size="icon" className='bg-gray-100'>
-              <File className="h-5 w-5" />
-            </Button>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <Star className="h-5 w-5" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <div className="p-2">
-                  <h3 className="text-sm font-medium mb-2">FAVORITES</h3>
-                  {favorites.map((item, index) => (
-                    <DropdownMenuItem key={index}>{item}</DropdownMenuItem>
-                  ))}
-                </div>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                
-                {/* Clock */}
-                <Button variant="ghost" size="icon">
-                  <Clock className="h-5 w-5" />
-                </Button>
+          <div className="flex items-center space-x-1">
+            {/* Search & New Chat*/}
+            <div className='bg-fill-secondary rounded-md'>
+              <Button size="icon" variant="ghost">
+                <Search className="h-5 w-5" />
+              </Button>
               
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <div className="p-2">
-                  <h3 className="text-sm font-medium mb-2">RECENTS</h3>
-                  {recents.map((item, index) => (
-                    <DropdownMenuItem key={index}>{item}</DropdownMenuItem>
-                  ))}
-                </div>
-              </DropdownMenuContent>
-            </DropdownMenu>
+              {/* New Chat */}
+              <Button size="icon" variant="ghost">
+                <File className="h-5 w-5" />
+              </Button>
+            </div>
+
+
+            {/* Favorites & Recents */}
+            <div className='bg-fill-secondary rounded-md'>
+            {/* Favorites section */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <Star className="h-5 w-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className='bg-fill-secondary gap-0 p-0'>
+                    <h3 className="text-overline-small text-text-secondary font-medium px-2 pt-2">FAVORITES</h3>
+                    {favorites.map((item, index) => (
+                      <DropdownMenuItem key={index} className="py-1 text-text-primary hover:bg-fill-secondary">
+                        {item}
+                        {index < favorites.length - 1 && <DropdownMenuSeparator className='bg-border-default -mx-0 my-0'/>}
+                      </DropdownMenuItem>
+                    ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+              
+              {/* Recent chats section */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  
+                  <Button variant="ghost" size="icon">
+                    <Clock className="h-5 w-5" />
+                  </Button>
+                
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className='bg-fill-secondary gap-0 p-0'>
+                    <h3 className="text-overline-small text-text-secondary font-medium px-2 pt-2 pb-1">RECENTS</h3>
+                    {recents.map((item, index) => (
+                      <DropdownMenuItem key={index} className="py-1 text-text-primary hover:bg-fill-secondary">
+                        {item}
+                        {index < recents.length - 1 && <DropdownMenuSeparator className='bg-border-default -mx-0 my-0'/>}
+                      </DropdownMenuItem>
+                    ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
 
             {/* Circle Help */}
-            <Button variant="ghost" size="icon">
-              <CircleHelp className="h-5 w-5" />
+            <Button variant="ghost" size="icon" className='cursor-default'>
+              <CursorTooltip/>
             </Button>
           </div>
         </div>

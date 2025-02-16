@@ -35,12 +35,12 @@ const ChatInterface = () => {
             placeholder="Enter a SMILES string"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            className="w-full h-12 px-4 bg-gray-100 border-none focus-visible:ring-0 focus:border-gray-300 rounded-l-lg shadow-none"
+            className="w-full h-12 px-4 bg-surface-main border-none focus-visible:ring-0 focus:border-gray-300 rounded-l-lg shadow-none"
           />
             <Button 
-              className="h-12 px-4 bg-gray-300 hover:bg-black text-white shadow-none ml-1 transition-colors duration-200"
+              className="h-12 px-4 bg-fill-primary-hover text-gray-50 shadow-none ml-1 "
             >
-            <ArrowUp/>
+              <ArrowUp size={16}/>
             </Button>
         </div>
         
@@ -56,7 +56,7 @@ const ChatInterface = () => {
                 {suggestion.text}
               </button>
             ))}
-            <span className="px-3 py-2 rounded-md bg-gray-50 text-gray-400 font-medium">+3</span>
+            <span className="px-3 py-2 rounded-md bg-fill-secondary text-black font-medium">+3</span>
           </div>
           
           <div className="relative group inline-block">
