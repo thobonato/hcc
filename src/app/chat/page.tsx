@@ -10,6 +10,7 @@ const ChatInterface = () => {
   const [isFirstPrompt, setIsFirstPrompt] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [input, setInput] = useState('');
+  const [isOpen, setIsOpen] = useState(true);
 
   const handleSubmit = (value: string) => {
     setIsLoading(true);
@@ -48,16 +49,16 @@ const ChatInterface = () => {
         © Human Chemical Co, 2025
       </div>
 
-      {!isFirstPrompt && !isLoading && 
-        <div className="flex w-full justify-between">
-          <div className="w-3/5 flex flex-col justify-end">
-            <ChatPanel/>
-          </div>
-          <div className="w-2/5">
-            <ModulePanel />
-          </div>
+      {!isFirstPrompt && !isLoading && (
+      <div className="flex w-full justify-between h-screen">
+        <div className={`flex flex-col justify-end transition-all duration-300 ${isOpen ? 'w-3/5' : 'w-full'}`}>
+          <ChatPanel />
         </div>
-      }
+        <div className={`w-2/5 ${!isOpen ? 'w-0' : ''}`}>
+          <ModulePanel onOpenChange={(open) => setIsOpen(open)} />
+        </div>
+      </div>
+    )}
     </div>
   );
 };

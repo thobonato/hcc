@@ -15,9 +15,9 @@ const CursorTooltip = () => {
          onMouseMove={handleMouseMove}
          onMouseEnter={() => setIsHovered(true)}
          onMouseLeave={() => setIsHovered(false)}>
-      <button className="flex items-center space-x-1 text-gray-400">
+      <div className="flex items-center space-x-1 text-gray-400">
         <CircleHelp size={16} />
-      </button>
+      </div>
       
       <AnimatePresence>
         {isHovered && (

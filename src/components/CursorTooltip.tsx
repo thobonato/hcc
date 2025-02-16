@@ -15,10 +15,10 @@ const CursorTooltip = () => {
          onMouseMove={handleMouseMove}
          onMouseEnter={() => setIsHovered(true)}
          onMouseLeave={() => setIsHovered(false)}>
-      <button className="flex items-center space-x-1 text-gray-400">
+      <div className="flex items-center space-x-1 text-gray-400">
         <Info size={16} />
         <span>What's a SMILES string?</span>
-      </button>
+      </div>
       
       <AnimatePresence>
         {isHovered && (
