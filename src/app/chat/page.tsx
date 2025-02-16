@@ -54,7 +54,7 @@ const ChatInterface = () => {
         <div className={`flex flex-col justify-end transition-all duration-300 ${isOpen ? 'w-3/5' : 'w-full'}`}>
           <ChatPanel />
         </div>
-        <div className={`w-2/5 ${!isOpen ? 'w-0' : ''}`}>
+        <div className={`${!isOpen ? 'w-0' : 'w-2/5'}`}>
           <ModulePanel onOpenChange={(open) => setIsOpen(open)} />
         </div>
       </div>
