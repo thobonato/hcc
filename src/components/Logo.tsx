@@ -6,10 +6,18 @@ interface LogoProps {
     loopDelay?: number;
     className?: string;
     stopLoop?: boolean;
+    playbackRate?: number;
 }
 
-const Logo: React.FC<LogoProps> = ({ loopDelay = 0, className, stopLoop = false }) => {
+const Logo: React.FC<LogoProps> = ({ loopDelay = 0, className, stopLoop = true, playbackRate = 1.0 }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
+
+    useEffect(() => {
+        const videoElement = videoRef.current;
+        if (videoElement) {
+            videoElement.playbackRate = playbackRate;
+        }
+    }, [playbackRate]);
 
     useEffect(() => {
         const videoElement = videoRef.current;
@@ -47,6 +55,13 @@ const Logo: React.FC<LogoProps> = ({ loopDelay = 0, className, stopLoop = false 
                 muted
                 autoPlay
                 loop={false}
+                onTimeUpdate={() => {
+                    const videoElement = videoRef.current;
+                    if (videoElement && !stopLoop && videoElement.currentTime >= 2.6) {
+                        videoElement.currentTime = 0;
+                        videoElement.play();
+                    }
+                }}
             >
                 <source 
                     src="https://stream.mux.com/YLk8X01PMRxTB6xO6el9FchZeiB8sYEddk9bON8fVxBg/capped-1080p.mp4" 
