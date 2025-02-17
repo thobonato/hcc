@@ -7,7 +7,7 @@ import {
     TableRow,
   } from "@/components/ui/table"
   import { Button } from "@/components/ui/button"
-  import { Info, ChevronDown } from 'lucide-react'
+  import { CircleHelp, ChevronDown } from 'lucide-react'
   import { useState } from 'react'
   
   interface EndpointData {
@@ -107,45 +107,83 @@ import {
     }
   
     return (
-      <div className="w-full p-4">
+      <div className="w-full">
         <Table>
+          {/* FIRST ROW */}
           <TableHeader>
-            <TableRow className="hover:bg-transparent">
-              <TableHead className="text-gray-500 font-normal">ENDPOINT</TableHead>
-              <TableHead className="text-right text-gray-500 font-normal">
-                P(ACTIVE) <Info className="w-4 h-4 inline ml-1 text-gray-400"/>
+            <TableRow className="text-overline bg-surface-dropdowns border-b border-border-default h-7">
+              <TableHead className="w-16 h-7"/> 
+              <TableHead className="text-text-secondary border-l border-border-default w-full h-7">
+                ENDPOINT
               </TableHead>
-              <TableHead className="text-right text-gray-500 font-normal">
-                CONFIDENCE <Info className="w-4 h-4 inline ml-1 text-gray-400"/>
+              <TableHead className="text-text-secondary border-l border-border-default whitespace-nowrap px-4 h-7">
+                P(ACTIVE) <CircleHelp className="w-4 h-4 inline ml-1"/>
+              </TableHead>
+              <TableHead className="text-text-secondary border-l border-border-default whitespace-nowrap px-4 h-7">
+                CONFIDENCE <CircleHelp className="w-4 h-4 inline ml-1"/>
               </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
+              
+            {/* MIDDLE ROWS */}
             {displayData.map((endpoint) => (
-              <TableRow key={endpoint.id} className="hover:bg-transparent">
-                <TableCell className="font-medium">
-                  <div className="flex items-center gap-2">
-                    <span className={`w-2 h-2 rounded-full ${getStatusColor(endpoint.status)}`}/>
-                    {endpoint.name}
+              <TableRow key={endpoint.id} className="border-b border-border-default h-7">
+                <TableCell className="h-7 p-0">
+                  <div className={`h-full w-full flex items-center justify-center ${getStatusColor(endpoint.status)} bg-opacity-10`}>
+                    <div className={`w-2.5 h-2.5 rounded-full ${getStatusColor(endpoint.status)}`} />
                   </div>
                 </TableCell>
-                <TableCell className="text-right">{endpoint.pActive}%</TableCell>
-                <TableCell className="text-right">{endpoint.confidence}</TableCell>
+                <TableCell className="text-body-regular border-l border-border-default h-7 py-0">
+                  {endpoint.name}
+                </TableCell>
+                <TableCell className="text-right border-l border-border-default h-7 py-0">
+                  {endpoint.pActive}%
+                </TableCell>
+                <TableCell className="text-right border-l border-border-default h-7 py-0">
+                  {endpoint.confidence}
+                </TableCell>
               </TableRow>
             ))}
+
+            {/* FINAL ROW */}
+            <TableRow className="h-7">
+              <TableCell className="px-3 border-b border-l border-border-default h-7">
+                <div className="flex justify-center items-center h-full">
+                  <div className="w-2.5 h-2.5 rounded-full bg-black"/>
+                </div>
+              </TableCell>
+              {/* Empty cell for maintaining vertical separator */}
+              <TableCell className="border-l border-b border-border-default p-0 h-7">
+                <Button 
+                  variant="ghost" 
+                  className="w-full h-7 text-text-secondary justify-between px-4 hover:bg-transparent"
+                  onClick={() => setShowAll(!showAll)}
+                >
+                  <span>{showAll ? 'Show Less' : `+${remainingCount} more`}</span>
+                </Button>
+              </TableCell>
+              <TableCell className="border-l border-b border-border-default p-0 h-7"/>
+              <TableCell 
+                colSpan={3} 
+                className="border-l border-b border-border-default p-0 h-7"
+              >
+                <Button 
+                  variant="ghost" 
+                  className="w-full h-7 text-text-secondary justify-between px-4 hover:bg-transparent"
+                  onClick={() => setShowAll(!showAll)}
+                >
+                  <span className="flex items-center justify-end w-full">
+                    {showAll ? 'HIDE' : 'SHOW'}
+                    <ChevronDown 
+                      className={`w-4 h-4 ml-1 transition-transform ${showAll ? 'rotate-180' : 'rotate-0'}`} 
+                    />
+                  </span>
+                </Button>
+              </TableCell>
+            </TableRow>
           </TableBody>
         </Table>
-        
-        <Button 
-          variant="ghost" 
-          className="w-full text-text-secondary"
-          onClick={() => setShowAll(!showAll)}
-        >
-          <span className="">
-            {showAll ? 'Show Less' : `+${remainingCount} more`}
-          </span>
-          <ChevronDown className={`ml-2 w-4 h-4 transition-transform ${showAll ? 'rotate-180' : ''}`} />
-        </Button>
       </div>
-    )
+    );
   }

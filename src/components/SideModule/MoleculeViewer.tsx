@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button"
 import { Expand, Minimize } from 'lucide-react'
 import { useState, useEffect } from 'react'
-import BasicMolViewer from "@/components/BasicMolViewer"
+import BasicMolViewer from "@/components/SideModule/BasicMolViewer"
 import Smiles2DViewer from "@/components/Smiles2DViewer"
 import { motion, AnimatePresence } from 'framer-motion'
+import FullScreenMolViewer from "@/components/SideModule/FullScreenMolViewer"
 
 export const MoleculeViewer = () => {
   const [view, setView] = useState("2D");
@@ -27,7 +28,7 @@ export const MoleculeViewer = () => {
   return (
     <>
       {isFullscreen && (
-        <div className="fixed inset-0 bg-white z-50">
+        <div className="fixed inset-0 bg-surface-background z-50">
             <div className="p-4 flex justify-between items-center">
             <Button 
               variant="ghost" 
@@ -91,13 +92,21 @@ export const MoleculeViewer = () => {
         </div>
         
         <div className={`w-full relative ${isFullscreen ? 'h-[calc(100vh-80px)] max-h-[calc(100vh-80px)]' : 'h-[300px] max-h-[300px]'}`}>
-          {view === "3D" && dataPdb && (
-            <BasicMolViewer 
+            {view === "3D" && dataPdb && (
+            isFullscreen ? (
+              <FullScreenMolViewer 
+              className="absolute inset-0 w-full h-full" 
+              dataPdb={dataPdb}
+              isFullscreen={true}
+              />
+            ) : (
+              <BasicMolViewer 
               className="absolute inset-0 w-full h-full" 
               dataPdb={dataPdb}
               isFullscreen={isFullscreen}
-            />
-          )}
+              />
+            )
+            )}
           {view === "2D" && (
             <div className="absolute inset-0 w-full h-full flex items-center justify-center">
               <Smiles2DViewer 

@@ -71,7 +71,7 @@ const Header = () => {
   ]);
 
   return (
-    <header className="w-full bg-white">
+    <header className="w-full bg-surface-background">
       <div className="max-w-screen p-6">
         <div className="flex items-center">
           {/* Profile Section */}

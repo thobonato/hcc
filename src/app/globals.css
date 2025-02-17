@@ -14,12 +14,13 @@
   :root {
     --radius: 0.5rem;
     
-    /* Base colors */
+    /* Color Primitives */
     --app-white: 255 255 255;
     --app-gray-50: 249 249 249;
     --app-gray-300: 204 204 204;
     --app-gray-600: 153 153 153;
     --app-black: 0 0 0;
+    --app-black-4: 0 0 0 / 0.04;
     --app-green: 40 192 97;
     --app-red: 255 0 0;
     --app-yellow: 255 191 0;
@@ -49,8 +50,20 @@
     --text-green: 40 192 97;
     --text-red: 255 0 0;
     --text-yellow: 255 191 0;
+
+     /* Icon Colors */
+    --icon-white: 255 255 255;        
+    --icon-primary: 0 0 0;            
+    --icon-secondary: 153 153 153;    
+    --icon-secondary-hover: 204 204 204;
+    --icon-tertiary: 204 204 204;     
+    --icon-tertiary-hover: 0 0 0;     
+    --icon-green: 40 192 97;          
+    --icon-red: 255 0 0;              
+    --icon-yellow: 255 191 0;         
   }
 }
+
 
 @layer base {
   * {
@@ -106,5 +119,16 @@
     font-weight: 500;
     font-size: 10px;
     line-height: 12px;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none; 
+    scrollbar-width: none; 
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
 }

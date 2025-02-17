@@ -59,7 +59,7 @@ const ModulePanel = ({ onOpenChange }: ModulePanelProps) => {
       <AnimatePresence>
         {isOpen && (
           <motion.div 
-            className="fixed top-2 right-2 bottom-2 w-[40%] bg-fill-secondary overflow-hidden rounded-xl shadow-none"
+            className="fixed top-2 right-2 bottom-2 w-[40%] bg-fill-secondary rounded-xl shadow-none overflow-y-auto scrollbar-hide"
             variants={panelVariants}
             initial="initial"
             animate="animate"
@@ -78,7 +78,7 @@ const ModulePanel = ({ onOpenChange }: ModulePanelProps) => {
                 <div className="bg-fill-secondary mx-4 rounded-xl">
                   <TabsList className="w-full h-14 p-1 bg-transparent relative">
                     <motion.div 
-                      className="absolute top-1 left-1 w-[calc(50%-4px)] h-[calc(100%-8px)] bg-white rounded-lg shadow-none"
+                      className="absolute top-1 left-1 w-[calc(50%-4px)] h-[calc(100%-8px)] bg-surface-background rounded-lg shadow-none"
                       animate={{ x: value === "modules" ? "0%" : "100%" }}
                       transition={{ type: "spring", stiffness: 300, damping: 30 }}
                       layout
@@ -105,12 +105,12 @@ const ModulePanel = ({ onOpenChange }: ModulePanelProps) => {
                   <TabsContent value="modules" className="mt-0 h-full">
                     <div className="h-full flex flex-col">
                       {/* View Controls */}
-                      <div className="p-4">
+                      <div className="">
                         <MoleculeViewer/>
                       </div>
 
                       {/* Data Table */}
-                      <div className="p-4 flex-1">
+                      <div className="flex-1">
                         <DataTable/>
                       </div>
 

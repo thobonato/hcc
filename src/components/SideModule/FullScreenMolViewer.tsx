@@ -13,7 +13,7 @@ interface BasicMolViewerProps {
 }
 
 
-const BasicMolViewer: React.FC<BasicMolViewerProps> = ({ className, dataPdb = "1ZRX", isFullscreen = false }) => {
+const FullScreenMolViewer: React.FC<BasicMolViewerProps> = ({ className, dataPdb = "1ZRX", isFullscreen = false }) => {
   const viewerRef = useRef<HTMLDivElement>(null);
   const viewer3DRef = useRef<any>(null);
 
@@ -80,16 +80,20 @@ const BasicMolViewer: React.FC<BasicMolViewerProps> = ({ className, dataPdb = "1
     };
   }, [dataPdb, isFullscreen]);
 
-  return (
-    <div 
-      ref={viewerRef}
-      className={`viewer_3Dmoljs ${className}`}
-      style={{ 
-        position: 'relative', 
-        height: isFullscreen ? 'calc(100vh - 80px)' : '300px'
-      }}
-    />
-  );
+
+    return (
+        <div 
+        ref={viewerRef}
+        className={`viewer_3Dmoljs ${className}`}
+        style={{ 
+            position: 'relative', 
+            height: 'calc(100vh - 20px)', 
+            width: '100%',
+            backgroundColor: 'transparent',
+            padding: '10px'
+        }}
+        />
+    );
 };
 
-export default BasicMolViewer;
+export default FullScreenMolViewer;

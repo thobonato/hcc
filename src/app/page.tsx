@@ -1,7 +1,7 @@
 "use client";
 import { useState } from 'react';
 import Logo from '@/components/Logo';
-import BasicMolViewer from '@/components/BasicMolViewer';
+import BasicMolViewer from '@/components/SideModule/BasicMolViewer';
 import Smiles2DViewer from '@/components/Smiles2DViewer';
 
 const Home = () => {
@@ -11,7 +11,7 @@ const Home = () => {
   const [inputDataSmiles, setInputDataSmiles] = useState("");
 
   return (
-    <div className="min-h-screen bg-white font-sans w-full">
+    <div className="min-h-screen bg-surface-background font-sans w-full">
       <div className="flex justify-center pt-10">
         <h1 className="text-lg text-black">
           Human Chemical Co.
@@ -26,13 +26,21 @@ const Home = () => {
         </div>
 
       {/* Link to chat (WIP) */}
-      <div className="flex justify-center mt-10 font-sans">
+      <div className="flex justify-center space-x-4 mt-10 font-sans">
         <div className="border border-black p-1">
           <button 
-            onClick={() => window.location.href='/chat'} 
-            className="px-2 py-1 text-black"
+        onClick={() => window.location.href='/chat'} 
+        className="px-2 py-1 text-black"
           >
           Chat Interface Preview
+          </button>
+        </div>
+        <div className="border border-black p-1">
+          <button 
+        onClick={() => window.location.href='/test'} 
+        className="px-2 py-1 text-black"
+          >
+        Test for SMILES to 3D
           </button>
         </div>
       </div>
@@ -64,7 +72,7 @@ const Home = () => {
             }}
           />
           <button 
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 px-4 py-1.5 bg-white text-black border border-black hover:bg-gray-100 hover:border-gray-800 transition-colors duration-200"
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 px-4 py-1.5 bg-surface-background text-black border border-black hover:bg-gray-100 hover:border-gray-800 transition-colors duration-200"
             onClick={() => setDataPdb(inputPdbValue)}
           >
             View
@@ -101,7 +109,7 @@ const Home = () => {
             }}
           />
           <button 
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 px-4 py-1.5 bg-white text-black border border-black hover:bg-gray-100 hover:border-gray-800 transition-colors duration-200"
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 px-4 py-1.5 bg-surface-background text-black border border-black hover:bg-gray-100 hover:border-gray-800 transition-colors duration-200"
             onClick={() => setDataSmiles(inputDataSmiles)}
           >
             View

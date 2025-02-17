@@ -40,7 +40,7 @@ const ChatInterface = () => {
   }, [isLoading]);
 
   return (
-    <div className="h-screen w-full bg-white flex flex-col">
+    <div className="h-screen w-full bg-surface-background flex flex-col">
       <div className={`${isLoading ? 'hidden' : ''}`}>
         <Header/>
       </div>
