@@ -96,7 +96,7 @@ const ModulePanel = ({ onOpenChange }: ModulePanelProps) => {
                       value="citations"
                       className={`flex-1 h-full relative rounded-lg ${value === "citations" ? 'text-text-primary' : 'text-text-secondary'} z-10`}
                     >
-                      Citations (4)
+                      Citations (5)
                     </TabsTrigger>
                   </TabsList>
                 </div>

@@ -53,7 +53,7 @@ export const Citations = () => {
           <div key={citation.id}>
             <div className="p-4 bg-transparent rounded-lg space-y-2">
               <div className="flex items-start gap-3">
-                <Button className="bg-fill-secondary rounded h-7 w-6">
+                <Button className="bg-fill-secondary rounded h-7 w-6 cursor-default">
                   {citation.id}
                 </Button>
                 <div className="space-y-1">

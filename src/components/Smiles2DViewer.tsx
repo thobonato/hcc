@@ -7,17 +7,24 @@ declare global {
   }
 }
 
-const Smiles2DViewer = ({ 
-  smiles = '', 
-  width = 400, 
-  height = 400,
-  theme = 'light',
-  options = {}
-}) => {
+interface Smiles2DViewerProps {
+  smiles: string;
+  isFullscreen?: boolean;
+}
+
+const Smiles2DViewer = ({ smiles = '', isFullscreen = false, options={} }) => {
+  const [key, setKey] = useState(0);
+
+  useEffect(() => {
+    setKey(prev => prev + 1); // Force re-render on fullscreen change
+  }, [isFullscreen]);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [error] = useState(null);
   const [uniqueId] = useState(`smiles-${Math.random().toString(36).substr(2, 9)}`);
+
+  const width = isFullscreen ? window.innerWidth * 0.8 : 400;
+  const height = isFullscreen ? window.innerHeight * 0.8 : 400;
 
   useEffect(() => {
     const loadSmilesDrawer = async () => {
@@ -48,7 +55,6 @@ const Smiles2DViewer = ({
   useEffect(() => {
     if (isLoaded && containerRef.current && smiles) {
       try {
-        // Default options that work well for most cases
         const defaultOptions = {
           width,
           height,
@@ -68,12 +74,10 @@ const Smiles2DViewer = ({
           { spacedDrawing: true }
         );
 
-        // Clear previous content
         if (containerRef.current) {
           containerRef.current.innerHTML = '';
         }
 
-        // Create new SVG element
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         svg.setAttribute('id', uniqueId);
         svg.setAttribute('class', 'w-full h-full');
@@ -81,20 +85,15 @@ const Smiles2DViewer = ({
         svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
         containerRef.current.appendChild(svg);
 
-        // Draw the molecule
-        smilesDrawer.draw(smiles, `#${uniqueId}`, theme);
+        smilesDrawer.draw(smiles, `#${uniqueId}`, 'light');
       } catch (err) {
         console.error('Error rendering molecule:', err);
       }
     }
-  }, [isLoaded, smiles, width, height, theme, options, uniqueId]);
+  }, [isLoaded, smiles, width, height, options, uniqueId, isFullscreen]);
 
   if (error) {
-    return (
-      <div className="text-red-500 p-4 text-center" role="alert">
-        {error}
-      </div>
-    );
+    return <div className="text-red-500 p-4 text-center" role="alert">{error}</div>;
   }
 
   if (!isLoaded) {
@@ -108,8 +107,11 @@ const Smiles2DViewer = ({
   return (
     <div 
       ref={containerRef}
-      className="w-full aspect-square"
-      style={{ maxWidth: width, maxHeight: height }}
+      className="flex items-center justify-center"
+      style={{ 
+        width: width,
+        height: height,
+      }}
     />
   );
 };

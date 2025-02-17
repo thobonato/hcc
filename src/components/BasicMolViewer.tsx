@@ -9,11 +9,20 @@ declare global {
 interface BasicMolViewerProps {
   className?: string;
   dataPdb?: string;
+  isFullscreen?: boolean;
 }
 
-const BasicMolViewer: React.FC<BasicMolViewerProps> = ({ className, dataPdb = "1ZRX" }) => {
+
+const BasicMolViewer: React.FC<BasicMolViewerProps> = ({ className, dataPdb = "1ZRX", isFullscreen = false }) => {
   const viewerRef = useRef<HTMLDivElement>(null);
   const viewer3DRef = useRef<any>(null);
+
+  useEffect(() => {
+    if (viewer3DRef.current) {
+      viewer3DRef.current.resize();
+      viewer3DRef.current.render();
+    }
+  }, [isFullscreen]);
 
   useEffect(() => {
     let scripts: HTMLScriptElement[] = [];
@@ -69,13 +78,16 @@ const BasicMolViewer: React.FC<BasicMolViewerProps> = ({ className, dataPdb = "1
         viewerRef.current.innerHTML = '';
       }
     };
-  }, [dataPdb]);
+  }, [dataPdb, isFullscreen]);
 
   return (
     <div 
       ref={viewerRef}
       className={`viewer_3Dmoljs ${className}`}
-      style={{ position: 'relative', height: '300px' }}
+      style={{ 
+        position: 'relative', 
+        height: isFullscreen ? 'calc(100vh - 80px)' : '300px'
+      }}
     />
   );
 };
