@@ -72,10 +72,10 @@ const Header = () => {
 
   return (
     <header className="w-full bg-white">
-      <div className="max-w-screen-xl mx-auto p-6">
-        <div className="flex items-center justify-between">
+      <div className="max-w-screen p-6">
+        <div className="flex items-center">
           {/* Profile Section */}
-          <div className="flex items-center space-x-0">
+          <div className="flex items-center space-x-2">
             <HoverDropdownMenu icon={User}>
               <DropdownMenuItem className="py-1 text-text-primary hover:bg-fill-secondary">
                 info@fennell.cv

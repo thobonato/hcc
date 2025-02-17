@@ -9,6 +9,7 @@ interface ModulePanelProps {
   
   const ModulePanel = ({ onOpenChange }: ModulePanelProps) => {
     const [isOpen, setIsOpen] = useState(true);
+    const [value, setValue] = useState("modules");
   
     const handleToggle = () => {
       const newState = !isOpen;
@@ -54,7 +55,7 @@ interface ModulePanelProps {
         <AnimatePresence>
           {isOpen && (
             <motion.div 
-              className="fixed top-0 right-0 w-[40%] h-full bg-fill-secondary overflow-hidden rounded-l-lg"
+              className="fixed top-2 right-2 bottom-2 w-[40%] bg-fill-secondary overflow-hidden rounded-xl shadow-none"
               variants={panelVariants}
               initial="initial"
               animate="animate"
@@ -69,25 +70,31 @@ interface ModulePanelProps {
                 </div>
               </div>
 
-              <Tabs defaultValue="modules" className="w-full">
-                <div className="border-b">
-                  <TabsList className="w-full h-12 p-0 bg-transparent">
-                    <TabsTrigger 
-                      value="modules" 
-                      className="flex-1 h-full data-[state=active]:bg-transparent data-[state=active]:shadow-none border-b-2 border-transparent data-[state=active]:border-black rounded-none"
-                    >
-                      <div className="flex items-center gap-2">
-                        Modules
-                        <span className="px-2 py-0.5 text-xs bg-green-100 text-green-700 rounded">NEW</span>
-                      </div>
-                    </TabsTrigger>
-                    <TabsTrigger 
-                      value="citations" 
-                      className="flex-1 h-full data-[state=active]:bg-transparent data-[state=active]:shadow-none border-b-2 border-transparent data-[state=active]:border-black rounded-none text-gray-500"
-                    >
-                      Citations (4)
-                    </TabsTrigger>
-                  </TabsList>
+            <Tabs value={value} onValueChange={setValue} className="w-full">
+                <div className="bg-fill-secondary mx-4 rounded-xl">
+                    <TabsList className="w-full h-14 p-1 bg-transparent relative">
+                        <motion.div 
+                            className="absolute top-1 left-1 w-[calc(50%-4px)] h-[calc(100%-8px)] bg-white rounded-lg shadow-none"
+                            animate={{ x: value === "modules" ? "0%" : "100%" }}
+                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                            layout
+                        />
+                        <TabsTrigger 
+                            value="modules" 
+                            className="flex-1 h-full relative rounded-lg text-text-primary z-10"
+                        >
+                            <div className="flex items-center gap-2">
+                                <span>Modules</span>
+                                <span className="px-2 py-0.5 text-xs font-medium bg-green-50 text-green-600 rounded">NEW</span>
+                            </div>
+                        </TabsTrigger>
+                        <TabsTrigger 
+                            value="citations"
+                            className="flex-1 h-full relative rounded-lg text-text-primary z-10"
+                        >
+                            Citations (4)
+                        </TabsTrigger>
+                    </TabsList>
                 </div>
 
                 <TabsContent value="modules" className="mt-0">
