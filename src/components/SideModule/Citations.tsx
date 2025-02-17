@@ -6,7 +6,7 @@ interface Citation {
     subtitle: string;
     reference: string;
     doi?: string;
-   }
+}
 
 export const citationsData: Citation[] = [
     {
@@ -46,37 +46,36 @@ export const citationsData: Citation[] = [
     }
 ];
 
-
 export const Citations = () => {
     return (
       <div className="px-4 py-2 space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto">
-        {citationsData.map((citation) => (
-          <div 
-            key={citation.id}
-            className="p-4 bg-transparent rounded-lg space-y-2"
-          >
-            <div className="flex items-start gap-3">
-              <Button className="bg-fill-secondary rounded h-7 w-6">
-                {citation.id}
-              </Button>
-              <div className="space-y-1">
-                <h3 className="font-medium text-lg">{citation.title}</h3>
-                <p className="text-text-primary text-sm">{citation.subtitle}</p>
+        {citationsData.map((citation, index) => (
+          <div key={citation.id}>
+            <div className="p-4 bg-transparent rounded-lg space-y-2">
+              <div className="flex items-start gap-3">
+                <Button className="bg-fill-secondary rounded h-7 w-6">
+                  {citation.id}
+                </Button>
+                <div className="space-y-1">
+                  <h3 className="font-medium text-lg">{citation.title}</h3>
+                  <p className="text-text-primary text-sm">{citation.subtitle}</p>
+                </div>
               </div>
+              <p className="text-sm text-text-primary">{citation.reference}</p>
+              {citation.doi && (
+                <a 
+                  href={`https://doi.org/${citation.doi}`}
+                  className="text-sm text-text-primary underline block"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  https://doi.org/{citation.doi}
+                </a>
+              )}
             </div>
-            <p className="text-sm text-text-primary">{citation.reference}</p>
-            {citation.doi && (
-              <a 
-                href={`https://doi.org/${citation.doi}`}
-                className="text-sm text-text-primary underline block"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                https://doi.org/{citation.doi}
-              </a>
-            )}
+            {index < citationsData.length - 1 && <hr className="my-4" />}
           </div>
         ))}
       </div>
     )
-   }
+}

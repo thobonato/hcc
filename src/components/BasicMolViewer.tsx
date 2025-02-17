@@ -1,10 +1,10 @@
+import React, { useEffect, useRef } from 'react';
+
 declare global {
   interface Window {
     $3Dmol: any;
   }
 }
-
-import React, { useEffect, useRef } from 'react';
 
 interface BasicMolViewerProps {
   className?: string;
@@ -17,52 +17,41 @@ const BasicMolViewer: React.FC<BasicMolViewerProps> = ({ className, dataPdb = "1
 
   useEffect(() => {
     let scripts: HTMLScriptElement[] = [];
+    let isDestroyed = false;
 
     const loadScripts = async () => {
-      // Check if scripts are already loaded
       if (!window.$3Dmol) {
         const script1 = document.createElement('script');
         script1.src = 'https://3Dmol.org/build/3Dmol-min.js';
-        
-        const script2 = document.createElement('script');
-        script2.src = 'https://3Dmol.org/build/3Dmol.ui-min.js';
-        
         document.body.appendChild(script1);
-        document.body.appendChild(script2);
-        scripts = [script1, script2];
-
-        // Wait for scripts to load
-        await Promise.all([
-          new Promise(resolve => script1.onload = resolve),
-          new Promise(resolve => script2.onload = resolve)
-        ]);
+        scripts = [script1];
+        await new Promise(resolve => script1.onload = resolve);
       }
 
-      // Initialize viewer after scripts are loaded
-      initializeViewer();
+      if (!isDestroyed) {
+        initializeViewer();
+      }
     };
 
     const initializeViewer = async () => {
       if (!viewerRef.current || !window.$3Dmol) return;
 
-      // Clear existing viewer if any
-      if (viewer3DRef.current) {
-        viewer3DRef.current.removeAllModels();
+      if (viewerRef.current) {
+        viewerRef.current.innerHTML = '';
       }
 
-      // Create new viewer
       const viewer = window.$3Dmol.createViewer(viewerRef.current, {
-        backgroundColor: "0xffffff"
+        backgroundColor: "transparent"
       });
       viewer3DRef.current = viewer;
 
       try {
-        // Fetch and load PDB data
         const response = await fetch(`https://files.rcsb.org/view/${dataPdb}.pdb`);
         const pdbData = await response.text();
         
         viewer.addModel(pdbData, "pdb");
         viewer.setStyle({}, {stick:{radius:0.1}, sphere:{radius:0.3}});
+        viewer.setBackgroundColor("transparent", 0);
         viewer.spin('x',0.05);
         viewer.zoomTo();
         viewer.render();
@@ -73,15 +62,11 @@ const BasicMolViewer: React.FC<BasicMolViewerProps> = ({ className, dataPdb = "1
 
     loadScripts();
 
-    // Cleanup
     return () => {
-      scripts.forEach(script => {
-        if (script.parentNode) {
-          script.parentNode.removeChild(script);
-        }
-      });
-      if (viewer3DRef.current) {
-        viewer3DRef.current.removeAllModels();
+      isDestroyed = true;
+      scripts.forEach(script => script.parentNode?.removeChild(script));
+      if (viewerRef.current) {
+        viewerRef.current.innerHTML = '';
       }
     };
   }, [dataPdb]);
@@ -90,7 +75,7 @@ const BasicMolViewer: React.FC<BasicMolViewerProps> = ({ className, dataPdb = "1
     <div 
       ref={viewerRef}
       className={`viewer_3Dmoljs ${className}`}
-      style={{ position: 'relative' }}
+      style={{ position: 'relative', height: '300px' }}
     />
   );
 };

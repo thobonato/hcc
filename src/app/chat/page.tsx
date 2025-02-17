@@ -55,7 +55,7 @@ const ChatInterface = () => {
             <PromptBox onSubmit={handleSubmit}/>
           </div>
 
-          <div className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 text-sm text-gray-400 ${isLoading ? 'hidden' : ''}`}>
+          <div className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 text-sm text-text-secondary ${isLoading ? 'hidden' : ''}`}>
             © Human Chemical Co, 2025
           </div>
         </div>

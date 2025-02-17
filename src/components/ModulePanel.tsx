@@ -85,7 +85,7 @@ const ModulePanel = ({ onOpenChange }: ModulePanelProps) => {
                     />
                     <TabsTrigger 
                       value="modules" 
-                      className="flex-1 h-full relative rounded-lg text-text-primary z-10"
+                      className={`flex-1 h-full relative rounded-lg z-10 ${value === "modules" ? 'text-text-primary' : 'text-text-secondary'}`}
                     >
                       <div className="flex items-center gap-2">
                         <span>Modules</span>
@@ -94,7 +94,7 @@ const ModulePanel = ({ onOpenChange }: ModulePanelProps) => {
                     </TabsTrigger>
                     <TabsTrigger 
                       value="citations"
-                      className="flex-1 h-full relative rounded-lg text-text-primary z-10"
+                      className={`flex-1 h-full relative rounded-lg ${value === "citations" ? 'text-text-primary' : 'text-text-secondary'} z-10`}
                     >
                       Citations (4)
                     </TabsTrigger>
