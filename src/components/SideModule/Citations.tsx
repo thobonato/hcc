@@ -58,22 +58,21 @@ export const Citations = () => {
                 </Button>
                 <div className="space-y-1">
                   <h3 className="font-medium text-lg">{citation.title}</h3>
-                  <p className="text-text-primary text-sm">{citation.subtitle}</p>
+                  <p className="text-sm text-text-primary">{citation.reference}</p>
+                  {citation.doi && (
+                    <a 
+                      href={`https://doi.org/${citation.doi}`}
+                      className="text-sm text-text-primary underline block"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      https://doi.org/{citation.doi}
+                    </a>
+                  )}
                 </div>
               </div>
-              <p className="text-sm text-text-primary">{citation.reference}</p>
-              {citation.doi && (
-                <a 
-                  href={`https://doi.org/${citation.doi}`}
-                  className="text-sm text-text-primary underline block"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  https://doi.org/{citation.doi}
-                </a>
-              )}
             </div>
-            {index < citationsData.length - 1 && <hr className="my-4" />}
+            {index < citationsData.length - 1 && <hr className="my-2" />}
           </div>
         ))}
       </div>

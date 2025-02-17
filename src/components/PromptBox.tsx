@@ -37,7 +37,10 @@ interface PromptBoxProps {
                 onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
                 className="w-full h-12 px-4 bg-surface-main border-none focus-visible:ring-0 focus:border-gray-300 rounded-l-lg shadow-none"
             />
-                <Button onClick={handleSubmit} className="h-12 px-4 bg-fill-primary-hover hover:bg-fill-primary text-gray-50 shadow-none ml-1 ">
+                <Button 
+                    onClick={handleSubmit} 
+                    className={`h-12 px-4 ${input ? 'bg-fill-primary' : 'bg-fill-primary-hover'} text-gray-50 shadow-none ml-1`}
+                >
                     <ArrowUp size={16}/>
                 </Button>
             </div>
