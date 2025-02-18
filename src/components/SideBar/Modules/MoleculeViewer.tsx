@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button"
 import { Expand, Minimize } from 'lucide-react'
 import { useState, useEffect } from 'react'
-import BasicMolViewer from "@/components/sidebar/modules/BasicMolViewer"
-import Smiles2DViewer from "@/components/sidebar/modules/Smiles2DViewer"
+import BasicMolViewer from "@/components/Sidebar/Modules/BasicMolViewer"
+import Smiles2DViewer from "@/components/Sidebar/Modules/Smiles2DViewer"
 import { motion, AnimatePresence } from 'framer-motion'
 
 export const MoleculeViewer = () => {

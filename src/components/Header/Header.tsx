@@ -2,7 +2,7 @@
 import React, { useState, useCallback } from 'react';
 import { User, Search, File, Star, Clock } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import CursorTooltip from '@/components/header/CursorTooltipHeader';
+import CursorTooltip from '@/components/Header/CursorTooltipHeader';
 import {
   DropdownMenu,
   DropdownMenuContent,

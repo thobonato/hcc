@@ -1,9 +1,9 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import Header from '@/components/header/Header';
+import Header from '@/components/Header/Header';
 import PromptBox from '@/components/PromptBox';
-import ChatPanel from '@/components/chat/ChatPanel';
-import ModulePanel from '@/components/sidebar/modules/ModulePanel';
+import ChatPanel from '@/components/Chat/ChatPanel';
+import ModulePanel from '@/components/Sidebar/Modules/ModulePanel';
 import Logo from '@/components/Logo';
 
 const ChatInterface = () => {
