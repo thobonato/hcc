@@ -1,8 +1,8 @@
 "use client";
 import { useState } from 'react';
 import Logo from '@/components/Logo';
-import BasicMolViewer from '@/components/SideModule/BasicMolViewer';
-import Smiles2DViewer from '@/components/Smiles2DViewer';
+import BasicMolViewer from '@/components/SideBar/Modules/BasicMolViewer';
+import Smiles2DViewer from '@/components/SideBar/Modules/Smiles2DViewer';
 
 const Home = () => {
   const [dataPdb, setDataPdb] = useState("");

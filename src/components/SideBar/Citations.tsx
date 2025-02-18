@@ -72,7 +72,7 @@ export const Citations = () => {
                 </div>
               </div>
             </div>
-            {index < citationsData.length - 1 && <hr className="my-2" />}
+            {index < citationsData.length - 1 && <hr className=" bg-border-default" />}
           </div>
         ))}
       </div>

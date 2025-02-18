@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header/Header';
 import PromptBox from '@/components/PromptBox';
 import ChatPanel from '@/components/ChatPanel';
-import ModulePanel from '@/components/ModulePanel';
+import ModulePanel from '@/components/SideBar/Modules/ModulePanel';
 import Logo from '@/components/Logo';
 
 const ChatInterface = () => {
