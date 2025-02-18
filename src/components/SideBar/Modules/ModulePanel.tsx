@@ -4,12 +4,12 @@ import { Button } from "@/components/ui/button"
 import { Star, PanelRightClose } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Citations } from '@/components/SideBar/Citations';
-import { MoleculeViewer } from '@/components/SideBar/Modules/MoleculeViewer';
-import { DataTable } from '@/components/SideBar/Modules/DataTable';
-import ModulesFooter from "@/components/SideBar/Modules/ModulesSelector";
+import { Citations } from '@/components/sidebar/Citations';
+import { MoleculeViewer } from '@/components/sidebar/modules/MoleculeViewer';
+import { DataTable } from '@/components/sidebar/modules/DataTable';
+import ModulesFooter from "@/components/sidebar/modules/ModulesSelector";
 import { Module } from "@/lib/types";
-import AnimatedTabs from "@/components/SideBar/Modules/AnimatedTabs";
+import AnimatedTabs from "@/components/sidebar/modules/AnimatedTabs";
 import type { TabOption } from "@/lib/types"
 
 

@@ -1,9 +1,9 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import Header from '@/components/Header/Header';
+import Header from '@/components/header/Header';
 import PromptBox from '@/components/PromptBox';
-import ChatPanel from '@/components/ChatPanel';
-import ModulePanel from '@/components/SideBar/Modules/ModulePanel';
+import ChatPanel from '@/components/chat/ChatPanel';
+import ModulePanel from '@/components/sidebar/modules/ModulePanel';
 import Logo from '@/components/Logo';
 
 const ChatInterface = () => {
@@ -11,7 +11,7 @@ const ChatInterface = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [input, setInput] = useState('');
   const [isOpen, setIsOpen] = useState(true);
-  const [headerHeight, setHeaderHeight] = useState(0);
+  const [offsetHeight, setHeaderHeight] = useState(0);
 
   const handleSubmit = (value: string) => {
     setIsLoading(true);
@@ -40,7 +40,7 @@ const ChatInterface = () => {
   }, [isLoading]);
 
   return (
-    <div className="h-screen w-full bg-surface-background flex flex-col">
+    <div className="h-screen w-full bg-surface-background flex flex-col overflow-hidden">
       <div className={`${isLoading ? 'hidden' : ''}`}>
         <Header/>
       </div>
@@ -61,14 +61,8 @@ const ChatInterface = () => {
         </div>
       ) : (
         !isLoading && (
-          <div 
-            className="flex w-full"
-            style={{ 
-              height: `calc(100vh - ${headerHeight}px)`,
-              marginTop: `${headerHeight}px` 
-            }}
-          >
-            <div className={`flex flex-col justify-end transition-all duration-300 ${isOpen ? 'w-3/5' : 'w-full'}`}>
+          <div className="flex flex-1 overflow-hidden">
+            <div className={`flex flex-col transition-all duration-300 ${isOpen ? 'w-3/5' : 'w-full'}`}>
               <ChatPanel />
             </div>
             <div className={`${!isOpen ? 'w-0' : 'w-2/5'} max-w-lg`}>
