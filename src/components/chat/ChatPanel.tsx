@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import Logo from "@/components/Logo";
-import UserMessage from '@/components/Chat/UserMessage';
-import ModelResponse from '@/components/Chat/ModelResponse';
-import PromptInput from '@/components/Chat/PromptInput';
+import UserMessage from '@/components/chat/UserMessage';
+import ModelResponse from '@/components/chat/ModelResponse';
+import PromptInput from '@/components/chat/PromptInput';
 
 interface Message {
     content: string;
