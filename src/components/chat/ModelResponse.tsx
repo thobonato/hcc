@@ -35,20 +35,21 @@ const ModelResponse = ({
   return (
     <div className="mb-8">
       <div className="max-w-4xl relative">
-        <div className="absolute -left-16 top-4">
-          <Image 
-            src={HCCLogo} 
-            alt="HCC Logo" 
-            width={32} 
-            height={32}
-            className="opacity-50"
-          />
-        </div>
-        <div className="flex flex-col">
+        <div className="flex items-start pl-4">
+          <div className="flex-shrink-0 pt-4 pr-4">
+            <Image 
+              src={HCCLogo} 
+              alt="HCC Logo" 
+              width={32} 
+              height={32}
+              className="opacity-50 mr-2"
+            />
+          </div>
           <div className="text-base">
             <MarkdownRenderer content={content} />
           </div>
-          <div className="flex gap-2 mt-4">
+          </div>
+          <div className="flex gap-2 mt-4 pl-16">
             <Button 
               variant="ghost" 
               size="icon" 
@@ -81,7 +82,6 @@ const ModelResponse = ({
             >
               <ThumbsDown className="w-4 h-4" />
             </Button>
-          </div>
         </div>
       </div>
     </div>

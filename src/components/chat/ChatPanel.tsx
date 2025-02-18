@@ -41,9 +41,7 @@ Here's a **bold statement** about polymers and *italic emphasis* on key points.
 
 You can view this in the polymer 3d model. I will make this module visible in your sidebar now. I will highlight it there.
 
-Please feel free to ask further questions about the data that you see.
-
-[Regenerated at ${new Date().toLocaleTimeString()}]`,
+Please feel free to ask further questions about the data that you see.`,
             timestamp: "1m ago",
             isUser: false
         };
@@ -67,7 +65,7 @@ Please feel free to ask further questions about the data that you see.
 
         const newMessage: Message = {
             content: input,
-            timestamp: "1m ago",
+            timestamp: new Date().toLocaleTimeString(),
             isUser: true
         };
 
