@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ChevronDown, Check } from 'lucide-react';
 import type { Module } from '@/lib/types';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -44,6 +44,16 @@ const ModulesFooter = ({
     return acc;
   }, {} as Record<string, Module[]>);
 
+  const modulesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    modulesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [isExpanded]);
+
   return (
     <div className="relative">
         <AnimatePresence>
@@ -53,7 +63,7 @@ const ModulesFooter = ({
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.3 }}
-                    className="absolute bottom-full w-full p-4 pb-0"
+                    className="relative bottom-full w-full p-4 pb-0"
                 >
                     <div className="bg-fill-secondary rounded-lg py-2">
                         <div className="space-y-2">
@@ -98,6 +108,7 @@ const ModulesFooter = ({
                     className={`w-4 h-4 transform transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
                 />
             </button>
+            <div ref={modulesEndRef}/>
         </div>
     </div>
   );

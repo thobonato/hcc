@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Logo from "@/components/Logo";
 import UserMessage from '@/components/chat/UserMessage';
 import ModelResponse from '@/components/chat/ModelResponse';
@@ -15,6 +15,8 @@ const ChatPanel = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [showLogo, setShowLogo] = useState(true);
     const [isRegenerating, setIsRegenerating] = useState(false);
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+
 
     const generateAIResponse = (messageContent: string) => {
         return {
@@ -46,6 +48,14 @@ Please feel free to ask further questions about the data that you see.`,
             isUser: false
         };
     };
+    
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+      }, [messages]);      
 
     const handleSubmit = (regenerateIndex?: number) => {
         if (regenerateIndex !== undefined && !isRegenerating) {
@@ -57,6 +67,7 @@ Please feel free to ask further questions about the data that you see.`,
                 newMessages[regenerateIndex] = generateAIResponse(userMessage);
                 setMessages(newMessages);
                 setIsRegenerating(false);
+                scrollToBottom();
             }, 1000);
             return;
         }
@@ -112,6 +123,7 @@ Please feel free to ask further questions about the data that you see.`,
                                 </div>
                             )
                         ))}
+                        <div ref={messagesEndRef}/>
                     </div>
                 </div>
             </div>

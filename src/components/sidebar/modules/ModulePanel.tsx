@@ -110,7 +110,7 @@ const ModulePanel = ({ onOpenChange }: ModulePanelProps) => {
   };
 
   return (
-    <div className="w-full relative">
+    <div className="w-full relative pov">
       <div className="relative">
         <Button 
           className={`fixed top-4 right-4 z-50 ${!isOpen ? 'bg-fill-secondary' : ''}`} 
@@ -131,14 +131,14 @@ const ModulePanel = ({ onOpenChange }: ModulePanelProps) => {
       <AnimatePresence>
         {isOpen && (
           <motion.div 
-            className="fixed top-2 right-2 bottom-2 w-[40%] bg-fill-secondary rounded-xl shadow-none overflow-hidden"
+            className="fixed top-2 right-2 bottom-2 w-[40%] bg-fill-secondary rounded-xl shadow-none overflow-y-auto"
             variants={panelVariants}
             initial="initial"
             animate="animate"
             exit="exit"
           >
             
-            <div className="h-full flex flex-col overflow-hidden rounded-l-lg">
+            <div className="h-full flex flex-col overflow-y-auto rounded-l-lg">
               
               {/* Header */}  
               <div className="px-4 pt-2 flex justify-between items-center">
@@ -157,7 +157,7 @@ const ModulePanel = ({ onOpenChange }: ModulePanelProps) => {
                 />
 
                 {/* Modules */}
-                <div className="flex-1 overflow-hidden">
+                <div className="flex-1 overflow-y-auto">
                 <TabsContent value="modules" className="mt-0 h-full">
                   <div className="h-full flex flex-col">
                     {/* Scrollable content area */}
