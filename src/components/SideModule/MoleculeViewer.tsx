@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import BasicMolViewer from "@/components/SideModule/BasicMolViewer"
 import Smiles2DViewer from "@/components/Smiles2DViewer"
 import { motion, AnimatePresence } from 'framer-motion'
-import FullScreenMolViewer from "@/components/SideModule/FullScreenMolViewer"
 
 export const MoleculeViewer = () => {
   const [view, setView] = useState("2D");
@@ -29,7 +28,7 @@ export const MoleculeViewer = () => {
     <>
       {isFullscreen && (
         <div className="fixed inset-0 bg-surface-background z-50">
-            <div className="p-4 flex justify-between items-center">
+          <div className="p-4 flex justify-between items-center">
             <Button 
               variant="ghost" 
               size="icon" 
@@ -40,26 +39,33 @@ export const MoleculeViewer = () => {
             </Button>
             <div className={`flex gap-1 bg-fill-secondary rounded-lg p-1 ${isFullscreen ? 'mx-auto' : ''}`}>
               {["2D", "3D"].map((type) => (
-              <Button 
-                key={type}
-                variant={view === type ? "secondary" : "ghost"}
-                size="sm"
-                className={`${view === type ? 'bg-fill-secondary-emphasis text-text-primary' : 'text-text-secondary'}`}
-                onClick={() => setView(type)}
-              >
-                {type}
-              </Button>
+                <Button 
+                  key={type}
+                  variant={view === type ? "secondary" : "ghost"}
+                  size="sm"
+                  className={`${view === type ? 'bg-fill-secondary-emphasis text-text-primary' : 'text-text-secondary'}`}
+                  onClick={() => setView(type)}
+                >
+                  {type}
+                </Button>
               ))}
             </div>
-            </div>
+          </div>
           
           <div className="w-full h-[calc(100vh-80px)]">
             {view === "3D" && dataPdb && (
-              <BasicMolViewer className="w-full h-full" dataPdb={dataPdb} />
+              <BasicMolViewer 
+                className="w-full h-full" 
+                dataPdb={dataPdb}
+                isFullscreen={isFullscreen}
+              />
             )}
             {view === "2D" && (
               <div className="w-full h-full flex items-center justify-center">
-                <Smiles2DViewer smiles={dataSmiles} />
+                <Smiles2DViewer 
+                  smiles={dataSmiles} 
+                  isFullscreen={isFullscreen}
+                />
               </div>
             )}
           </div>
@@ -91,22 +97,14 @@ export const MoleculeViewer = () => {
           </div>
         </div>
         
-        <div className={`w-full relative ${isFullscreen ? 'h-[calc(100vh-80px)] max-h-[calc(100vh-80px)]' : 'h-[300px] max-h-[300px]'}`}>
-            {view === "3D" && dataPdb && (
-            isFullscreen ? (
-              <FullScreenMolViewer 
-              className="absolute inset-0 w-full h-full" 
-              dataPdb={dataPdb}
-              isFullscreen={true}
-              />
-            ) : (
-              <BasicMolViewer 
+        <div className={`w-full relative ${isFullscreen ? 'h-[calc(100vh-80px)]' : 'h-[300px]'}`}>
+          {view === "3D" && dataPdb && (
+            <BasicMolViewer 
               className="absolute inset-0 w-full h-full" 
               dataPdb={dataPdb}
               isFullscreen={isFullscreen}
-              />
-            )
-            )}
+            />
+          )}
           {view === "2D" && (
             <div className="absolute inset-0 w-full h-full flex items-center justify-center">
               <Smiles2DViewer 

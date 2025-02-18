@@ -12,8 +12,11 @@ interface BasicMolViewerProps {
   isFullscreen?: boolean;
 }
 
-
-const BasicMolViewer: React.FC<BasicMolViewerProps> = ({ className, dataPdb = "1ZRX", isFullscreen = false }) => {
+const BasicMolViewer: React.FC<BasicMolViewerProps> = ({ 
+  className, 
+  dataPdb = "1ZRX", 
+  isFullscreen = false 
+}) => {
   const viewerRef = useRef<HTMLDivElement>(null);
   const viewer3DRef = useRef<any>(null);
 
@@ -61,7 +64,7 @@ const BasicMolViewer: React.FC<BasicMolViewerProps> = ({ className, dataPdb = "1
         viewer.addModel(pdbData, "pdb");
         viewer.setStyle({}, {stick:{radius:0.1}, sphere:{radius:0.3}});
         viewer.setBackgroundColor("transparent", 0);
-        viewer.spin('x',0.05);
+        viewer.spin('x', 0.05);
         viewer.zoomTo();
         viewer.render();
       } catch (error) {
@@ -78,37 +81,21 @@ const BasicMolViewer: React.FC<BasicMolViewerProps> = ({ className, dataPdb = "1
         viewerRef.current.innerHTML = '';
       }
     };
-  }, [dataPdb, isFullscreen]);
+  }, [dataPdb]);
 
-  if (isFullscreen) {
-    return (
-      <div 
-        ref={viewerRef}
-        className={`viewer_3Dmoljs ${className}`}
-        style={{ 
-          position: 'relative', 
-          height: 'calc(100vh - 20px)', 
-          width: '100%',
-          backgroundColor: 'transparent',
-          padding: '10px'
-        }}
-      />
-    );
-  } else {
-    return (
-      <div 
-        ref={viewerRef}
-        className={`viewer_3Dmoljs ${className}`}
-        style={{ 
-          position: 'relative', 
-          height: '300px', 
-          width: '100%',
-          backgroundColor: 'transparent',
-          padding: '0'
-        }}
-      />
-    );
-  }
+  return (
+    <div 
+      ref={viewerRef}
+      className={`viewer_3Dmoljs ${className}`}
+      style={{ 
+        position: 'relative', 
+        height: isFullscreen ? 'calc(100vh - 80px)' : '300px',
+        width: '100%',
+        backgroundColor: 'transparent',
+        padding: isFullscreen ? '10px' : '0'
+      }}
+    />
+  );
 };
 
 export default BasicMolViewer;

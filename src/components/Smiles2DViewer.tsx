@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from 'react';
 
 declare global {
@@ -12,19 +11,29 @@ interface Smiles2DViewerProps {
   isFullscreen?: boolean;
 }
 
-const Smiles2DViewer = ({ smiles = '', isFullscreen = false, options={} }) => {
+const Smiles2DViewer = ({ smiles = '', isFullscreen = false, options = {} }) => {
   const [key, setKey] = useState(0);
-
-  useEffect(() => {
-    setKey(prev => prev + 1); // Force re-render on fullscreen change
-  }, [isFullscreen]);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [error] = useState(null);
   const [uniqueId] = useState(`smiles-${Math.random().toString(36).substr(2, 9)}`);
 
-  const width = isFullscreen ? window.innerWidth * 0.8 : 400;
-  const height = isFullscreen ? window.innerHeight * 0.8 : 400;
+  // Updated width and height calculations
+  const width = isFullscreen ? window.innerWidth * 0.95 : 400;
+  const height = isFullscreen ? window.innerHeight * 0.85 : 400;
+
+  useEffect(() => {
+    const handleResize = () => {
+      setKey(prev => prev + 1);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    setKey(prev => prev + 1);
+  }, [isFullscreen]);
 
   useEffect(() => {
     const loadSmilesDrawer = async () => {
@@ -90,7 +99,7 @@ const Smiles2DViewer = ({ smiles = '', isFullscreen = false, options={} }) => {
         console.error('Error rendering molecule:', err);
       }
     }
-  }, [isLoaded, smiles, width, height, options, uniqueId, isFullscreen]);
+  }, [isLoaded, smiles, width, height, options, uniqueId, key]);
 
   if (error) {
     return <div className="text-red-500 p-4 text-center" role="alert">{error}</div>;
@@ -109,8 +118,10 @@ const Smiles2DViewer = ({ smiles = '', isFullscreen = false, options={} }) => {
       ref={containerRef}
       className="flex items-center justify-center"
       style={{ 
-        width: width,
-        height: height,
+        width: isFullscreen ? '100%' : width,
+        height: isFullscreen ? '100%' : height,
+        maxWidth: isFullscreen ? '100vw' : width,
+        maxHeight: isFullscreen ? '100vh' : height,
       }}
     />
   );

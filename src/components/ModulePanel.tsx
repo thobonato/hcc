@@ -103,7 +103,7 @@ const ModulePanel = ({ onOpenChange }: ModulePanelProps) => {
 
                 <div className="flex-1 overflow-auto">
                   <TabsContent value="modules" className="mt-0 h-full">
-                    <div className="h-full flex flex-col">
+                    <div className="h-full flex flex-col overflow-auto scrollbar-hidden">
                       {/* View Controls */}
                       <div className="">
                         <MoleculeViewer/>
