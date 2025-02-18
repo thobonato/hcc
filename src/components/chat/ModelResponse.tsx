@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Copy, CheckCircle2, RotateCcw, ThumbsDown, ThumbsUp } from 'lucide-react'
 import HCCLogo from '@/app/hcc.png';
 import Image from 'next/image';
-import MarkdownRenderer from '@/components/chat/MarkDownRenderer';
+import MarkdownRenderer from '@/components/chat/MarkdownRenderer';
 
 interface ModelResponseProps {
   content: string;
