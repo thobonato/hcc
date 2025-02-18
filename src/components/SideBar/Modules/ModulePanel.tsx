@@ -1,13 +1,17 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
+import { Tabs, TabsContent } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
-import { Star, PanelRightClose, ChevronDown } from 'lucide-react'
-import { useState } from 'react'
+import { Star, PanelRightClose } from 'lucide-react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Citations } from '@/components/SideBar/Citations';
 import { MoleculeViewer } from '@/components/SideBar/Modules/MoleculeViewer';
 import { DataTable } from '@/components/SideBar/Modules/DataTable';
 import ModulesFooter from "@/components/SideBar/Modules/ModulesSelector";
 import { Module } from "@/lib/types";
+import AnimatedTabs from "@/components/SideBar/Modules/AnimatedTabs";
+import type { TabOption } from "@/lib/types"
+
 
 interface ModulePanelProps {
   onOpenChange?: (open: boolean) => void;
@@ -16,6 +20,33 @@ interface ModulePanelProps {
 const ModulePanel = ({ onOpenChange }: ModulePanelProps) => {
   const [isOpen, setIsOpen] = useState(true);
   const [value, setValue] = useState("modules");
+  const [showNewBadge, setShowNewBadge] = useState(true);  // Control badge visibility
+
+  const tabs: TabOption[] = [
+    {
+      value: "modules",
+      label: "Modules",
+      badge: {
+        text: "NEW",
+        className: "bg-green-50 text-green-600",
+        show: showNewBadge 
+      }
+    },
+    {
+      value: "citations",
+      label: "Citations",
+      count: 5
+    }
+  ];
+
+  // hide NEW after 5 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowNewBadge(false);
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, []);
   
   const availableModules: Module[] = [
     { id: '1', name: 'Visuals', isDefault: true },
@@ -60,6 +91,7 @@ const ModulePanel = ({ onOpenChange }: ModulePanelProps) => {
       }
     }
   };
+
   const renderModuleContent = (module: Module) => {
     switch (module.name) {
       case 'Visuals':
@@ -79,14 +111,22 @@ const ModulePanel = ({ onOpenChange }: ModulePanelProps) => {
 
   return (
     <div className="w-full relative">
-      <Button 
-        className={`fixed top-4 right-4 z-50 ${!isOpen ? 'bg-fill-secondary' : ''}`} 
-        variant="ghost" 
-        size="icon" 
-        onClick={handleToggle}
-      >
-        <PanelRightClose className={`w-5 h-5 text-black ${isOpen ? 'text-gray-500' : ''}`}/>
-      </Button>
+      <div className="relative">
+        <Button 
+          className={`fixed top-4 right-4 z-50 ${!isOpen ? 'bg-fill-secondary' : ''}`} 
+          variant="ghost" 
+          size="icon" 
+          onClick={handleToggle}
+        >
+          <PanelRightClose className={`w-5 h-5 text-black ${isOpen ? 'text-gray-500' : ''}`}/>
+        </Button>
+        {!isOpen && showNewBadge && (
+          <span className={`fixed mt-10 top-4 right-2 px-2 py-0.5 text-xs font-medium rounded ${'bg-green-50 text-text-green'}`}>
+            <span className="inline-block w-2 h-2 mr-1 bg-text-green rounded-full"></span>
+            NEW
+          </span>
+        )}
+      </div>
 
       <AnimatePresence>
         {isOpen && (
@@ -108,33 +148,13 @@ const ModulePanel = ({ onOpenChange }: ModulePanelProps) => {
                 </div>
               </div>
 
-              {/* Modules/Citations Selector */}
               <Tabs value={value} onValueChange={setValue} className="w-full flex-1 flex flex-col">
-                <div className="bg-fill-secondary rounded-xl m-4">
-                  <TabsList className="w-full h-14 p-1 bg-transparent relative">
-                    <motion.div 
-                      className="absolute top-1 left-1 w-[calc(50%-4px)] h-[calc(100%-8px)] bg-surface-background rounded-lg shadow-none"
-                      animate={{ x: value === "modules" ? "0%" : "100%" }}
-                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                      layout
-                    />
-                    <TabsTrigger 
-                      value="modules" 
-                      className={`flex-1 h-full relative rounded-lg z-10 ${value === "modules" ? 'text-text-primary' : 'text-text-secondary'}`}
-                    >
-                      <div className="flex items-center gap-2">
-                        <span>Modules</span>
-                        <span className="px-2 py-0.5 text-xs font-medium bg-green-50 text-green-600 rounded">NEW</span>
-                      </div>
-                    </TabsTrigger>
-                    <TabsTrigger 
-                      value="citations"
-                      className={`flex-1 h-full relative rounded-lg ${value === "citations" ? 'text-text-primary' : 'text-text-secondary'} z-10`}
-                    >
-                      Citations (5)
-                    </TabsTrigger>
-                  </TabsList>
-                </div>
+                
+                {/* Modules/Citations Selector */}
+                <AnimatedTabs 
+                  tabs={tabs} 
+                  value={value}
+                />
 
                 {/* Modules */}
                 <div className="flex-1 overflow-hidden">
