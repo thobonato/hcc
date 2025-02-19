@@ -5,6 +5,7 @@ import PromptBox from '@/components/initial/PromptBox';
 import ChatPanel from '@/components/chat/ChatPanel';
 import ModulePanel from '@/components/sidebar/modules/ModulePanel';
 import Logo from '@/components/initial/Logo';
+import { useAuth } from '@/hooks/useAuth';
 
 const ChatInterface = () => {
   const [isFirstPrompt, setIsFirstPrompt] = useState(true);
@@ -12,6 +13,7 @@ const ChatInterface = () => {
   const [input, setInput] = useState('');
   const [isOpen, setIsOpen] = useState(true);
   const [offsetHeight, setHeaderHeight] = useState(0);
+  const user = useAuth();
 
   const handleSubmit = (value: string) => {
     setIsLoading(true);
@@ -38,6 +40,12 @@ const ChatInterface = () => {
       return () => clearTimeout(timer);
     }
   }, [isLoading]);
+
+  useEffect(() => {
+    if (!user) {
+      setIsFirstPrompt(true);
+    }
+  }, [user]);
 
   return (
     <div className="h-screen w-full bg-surface-background flex flex-col overflow-hidden">
