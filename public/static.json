@@ -1,0 +1,74 @@
+{
+    "statusCode": 200,
+    "body": {
+      "[GHS] Acute Toxicity": {
+        "prob": 83,
+        "confidence": 1.0
+      },
+      "[GHS] Carcinogenicity": {
+        "prob": 98,
+        "confidence": 1.0
+      },
+      "[GHS] DART": {
+        "prob": 99,
+        "confidence": 1.0
+      },
+      "[GHS] Eye Irritation": {
+        "prob": 92,
+        "confidence": 0.5
+      },
+      "[GHS] Skin Corrosion/Irritation": {
+        "prob": 84,
+        "confidence": 0.375
+      },
+      "[GHS] Skin Sensitization": {
+        "prob": 58,
+        "confidence": 0.25
+      },
+      "[GHS] STOT SE: Neurological Toxicity": {
+        "prob": 99,
+        "confidence": 1.0
+      },
+      "[GHS] STOT SE: Liver Toxicity": {
+        "prob": 96,
+        "confidence": 1.0
+      },
+      "[GHS] STOT SE: Cardiovascular Toxicity": {
+        "prob": 85,
+        "confidence": 0.625
+      },
+      "Stress Response": {
+        "prob": 97,
+        "confidence": 1.0
+      },
+      "Endocrine Activity": {
+        "prob": 100,
+        "confidence": 1.0
+      },
+      "Cellular Activity": {
+        "prob": 97,
+        "confidence": 1.0
+      },
+      "Immune Activity": {
+        "prob": 98,
+        "confidence": 1.0
+      },
+      "Metabolic Activity": {
+        "prob": 97,
+        "confidence": 1.0
+      },
+      "Enzyme Activity": {
+        "prob": 99,
+        "confidence": 1.0
+      },
+      "Ecological Activity": {
+        "prob": 1,
+        "confidence": 1.0
+      },
+      "Mutagenicity": {
+        "prob": 84,
+        "confidence": 0.875
+      }
+    }
+  }
+  

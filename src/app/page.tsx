@@ -1,8 +1,9 @@
 "use client";
 import { useState } from 'react';
-import Logo from '@/components/Logo';
+import Logo from '@/components/initial/Logo';
 import BasicMolViewer from '@/components/sidebar/modules/BasicMolViewer';
 import Smiles2DViewer from '@/components/sidebar/modules/Smiles2DViewer';
+import AuthButton from '@/components/header/auth/AuthButton';
 
 const Home = () => {
   const [dataPdb, setDataPdb] = useState("");
@@ -44,6 +45,8 @@ const Home = () => {
           </button>
         </div>
       </div>
+
+      <AuthButton/>
 
         {/* viewers */}
         <div className="flex flex-col md:flex-row justify-center md:space-x-16 space-y-8 md:space-y-0 px-4">

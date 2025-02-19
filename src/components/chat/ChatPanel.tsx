@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import Logo from "@/components/Logo";
+import Logo from '@/components/initial/Logo';
 import UserMessage from '@/components/chat/UserMessage';
 import ModelResponse from '@/components/chat/ModelResponse';
 import PromptInput from '@/components/chat/PromptInput';

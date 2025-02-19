@@ -1,10 +1,10 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Header from '@/components/header/Header';
-import PromptBox from '@/components/PromptBox';
+import PromptBox from '@/components/initial/PromptBox';
 import ChatPanel from '@/components/chat/ChatPanel';
 import ModulePanel from '@/components/sidebar/modules/ModulePanel';
-import Logo from '@/components/Logo';
+import Logo from '@/components/initial/Logo';
 
 const ChatInterface = () => {
   const [isFirstPrompt, setIsFirstPrompt] = useState(true);

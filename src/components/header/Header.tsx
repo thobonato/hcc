@@ -1,63 +1,18 @@
 'use client';
 import React, { useState, useCallback } from 'react';
-import { User, Search, File, Star, Clock } from 'lucide-react';
+import { PlaySquare, LucideIcon, Search, File, Star, Clock } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import CursorTooltip from '@/components/header/CursorTooltipHeader';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-// Improved HoverDropdownMenu component with debounced close
-import { LucideIcon } from 'lucide-react';
-
-const HoverDropdownMenu = ({ icon: Icon, children, align = "start" }: { icon: LucideIcon, children: React.ReactNode, align?: "start" | "center" | "end" }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [closeTimeout, setCloseTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
-
-  const handleMouseEnter = useCallback(() => {
-    if (closeTimeout) {
-      clearTimeout(closeTimeout);
-      setCloseTimeout(null);
-    }
-    setIsOpen(true);
-  }, [closeTimeout]);
-
-  const handleMouseLeave = useCallback(() => {
-    const timeout = setTimeout(() => {
-      setIsOpen(false);
-    }, 150); // Slight delay before closing
-    setCloseTimeout(timeout);
-  }, []);
-
-  return (
-    <div 
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      className="inline-block" // Ensures proper inline positioning
-    >
-      <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon">
-            <Icon className="h-5 w-5" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent 
-          align={align} 
-          className='bg-fill-secondary gap-0 p-0'
-          sideOffset={5}
-        >
-          {children}
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
-  );
-};
+import HoverDropdownMenu from '@/components/header/HoverDropdownMenu';
+import AuthButton from './auth/AuthButton';
+import { useAuth } from '@/hooks/useAuth';
 
 const Header = () => {
+  const { user } = useAuth();
   const [favorites] = useState([
     'TRCA hybrid requires bonding t...',
     'Polymer needed to make compl...',
@@ -74,41 +29,50 @@ const Header = () => {
     <header className="w-full bg-surface-background">
       <div className="max-w-screen p-6">
         <div className="flex items-center">
-          {/* Profile Section */}
-          <div className="flex items-center space-x-2">
-            <HoverDropdownMenu icon={User}>
-              <DropdownMenuItem className="py-1 text-text-primary hover:bg-fill-secondary">
-                info@fennell.cv
-              </DropdownMenuItem> 
-              <DropdownMenuSeparator className='bg-border-default -mx-0 my-0'/>
-              <DropdownMenuItem className="py-1 text-text-primary hover:bg-fill-secondary">
-                Settings
-              </DropdownMenuItem>
-              <DropdownMenuSeparator className=' -mx-0 my-0'/>
-              <DropdownMenuItem className="py-1 text-text-primary hover:bg-fill-secondary">
-                Payments
-              </DropdownMenuItem>
-              <DropdownMenuSeparator className='bg-border-default -mx-0 my-0'/>
-              <DropdownMenuItem className="py-1 text-text-primary hover:bg-fill-secondary">
-                Logout
-              </DropdownMenuItem>
-            </HoverDropdownMenu>
-          </div>
+          
+          {/* If not signed in, show log in button */}
+          {!user ? <AuthButton/> : (
+            <div className="flex items-center space-x-2">
+              {/* Profile Section */}
+              <HoverDropdownMenu 
+                image={user?.user_metadata?.avatar_url}
+              >
+                {/* User email display */}
+                <DropdownMenuItem className="py-1 text-text-primary">
+                  <span className="bg-fill-primary rounded-full p-1"></span>
+                  {user?.user_metadata?.email} 
+                </DropdownMenuItem> 
+                <DropdownMenuSeparator className='bg-border-default -mx-0 my-0'/>
+                <DropdownMenuItem className="py-1 text-text-primary hover:bg-fill-secondary">
+                  Settings
+                </DropdownMenuItem>
+                <DropdownMenuSeparator className=' -mx-0 my-0'/>
+                <DropdownMenuItem className="py-1 text-text-primary hover:bg-fill-secondary">
+                  Payments
+                </DropdownMenuItem>
+                <DropdownMenuSeparator className='bg-border-default -mx-0 my-0'/>
+                <DropdownMenuItem className="py-1 text-text-primary hover:bg-fill-secondary">
+                  {/* Logout */}
+                  <AuthButton/>
+                </DropdownMenuItem>
+              </HoverDropdownMenu>
+            </div>
+          )}
 
-            {/* Actions */}
-            <div className="flex items-center space-x-1">
+          {/* Actions */}
+          <div className="flex items-center space-x-1">
             {/* Search & New Chat*/}
             <div className='bg-fill-secondary rounded-md relative'>
-              <Button size="icon" variant="ghost" className="group">
-              <Search className="h-5 w-5" />
-                <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full bg-fill-secondary text-xs text-text-secondary px-1 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                <Button size="icon" variant="ghost" className="group m-0.5 hover:bg-fill-secondary-hover" disabled={!user}>
+                <Search className="h-5 w-5" />
+                <span className="absolute -bottom-1 right-8 transform translate-y-full bg-fill-secondary text-xs text-text-secondary px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
                   Search
                 </span>
               </Button>
               
-              <Button size="icon" variant="ghost" className="group">
+              <Button size="icon" variant="ghost" className="group m-0.5 hover:bg-fill-secondary-hover" disabled={!user}>
               <File className="h-5 w-5" />
-                <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full bg-fill-secondary text-xs text-text-secondary px-1 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="absolute -bottom-1 left-7 transform translate-y-full bg-fill-secondary text-xs text-text-secondary px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
                   New Chat
                 </span>
               </Button>
@@ -117,7 +81,7 @@ const Header = () => {
             {/* Favorites & Recents */}
             <div className='bg-fill-secondary rounded-md flex'>
               {/* Favorites section */}
-              <HoverDropdownMenu icon={Star}>
+              <HoverDropdownMenu icon={Star} disabled={!user}>
                 <h3 className="text-overline-small text-text-secondary font-medium px-2 pt-2">FAVORITES</h3>
                 {favorites.map((item, index) => (
                   <React.Fragment key={index}>
@@ -132,7 +96,7 @@ const Header = () => {
               </HoverDropdownMenu>
               
               {/* Recent chats section */}
-              <HoverDropdownMenu icon={Clock}>
+              <HoverDropdownMenu icon={Clock} disabled={!user}>
                 <h3 className="text-overline-small text-text-secondary font-medium px-2 pt-2 pb-1">RECENTS</h3>
                 {recents.map((item, index) => (
                   <React.Fragment key={index}>

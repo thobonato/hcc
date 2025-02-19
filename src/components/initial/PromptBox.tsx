@@ -2,8 +2,9 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import CursorTooltip from '@/components/CursorTooltip';
+import CursorTooltip from '@/components/initial/CursorTooltip';
 import { ArrowUp } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
 
 interface PromptBoxProps {
     onSubmit: (value: string) => void;
@@ -11,6 +12,7 @@ interface PromptBoxProps {
 
   const PromptBox = ({ onSubmit }: PromptBoxProps) => {
     const [input, setInput] = useState('');
+    const { user } = useAuth();
   
     const handleSubmit = () => {
       if (input.trim()) {
@@ -35,10 +37,12 @@ interface PromptBoxProps {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+                disabled={!user}
                 className="w-full h-12 px-4 bg-surface-main border-none focus-visible:ring-0 focus:border-gray-300 rounded-l-lg shadow-none"
             />
                 <Button 
                     onClick={handleSubmit} 
+                    disabled={!user}
                     className={`h-12 px-4 ${input ? 'bg-fill-primary' : 'bg-fill-primary-hover'} text-gray-50 shadow-none ml-1`}
                 >
                     <ArrowUp size={16}/>
@@ -51,6 +55,7 @@ interface PromptBoxProps {
                     {suggestions.map((suggestion) => (
                     <button
                         key={suggestion.text}
+                        disabled={!user}
                         onClick={() => setInput(suggestion.text)}
                         className={`px-3 py-2 rounded-md ${suggestion.bgColor} ${suggestion.textColor} font-medium`}
                     >
