@@ -25,19 +25,23 @@ export default function AuthButton() {
   }, [supabase])
 
   const handleSignIn = async () => {
+    const redirectTo = `${window.location.origin}/auth/callback`
+    const returnTo = window.location.href
+    
     await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-        queryParams: {
-          returnTo: `${window.location.origin}/chat`
-        }
-      },
+        provider: 'google',
+        options: {
+            redirectTo,
+            queryParams: {
+                returnTo
+            }
+        },
     })
   }
 
   const handleSignOut = async () => {
     await supabase.auth.signOut()
+    window.location.reload()
   }
 
   return (

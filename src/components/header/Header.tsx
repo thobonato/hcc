@@ -1,6 +1,6 @@
 'use client';
-import React, { useState, useCallback } from 'react';
-import { PlaySquare, LucideIcon, Search, File, Star, Clock } from 'lucide-react';
+import React, { useState } from 'react';
+import { Search, File, Star, Clock } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import CursorTooltip from '@/components/header/CursorTooltipHeader';
 import {
@@ -10,6 +10,7 @@ import {
 import HoverDropdownMenu from '@/components/header/HoverDropdownMenu';
 import AuthButton from './auth/AuthButton';
 import { useAuth } from '@/hooks/useAuth';
+import DisabledToolTip from '@/components/initial/DisabledToolTip';
 
 const Header = () => {
   const { user } = useAuth();
@@ -63,24 +64,40 @@ const Header = () => {
           <div className="flex items-center space-x-1">
             {/* Search & New Chat*/}
             <div className='bg-fill-secondary rounded-md relative'>
-                <Button size="icon" variant="ghost" className="group m-0.5 hover:bg-fill-secondary-hover" disabled={!user}>
+            <DisabledToolTip 
+                message="Please login to access"
+                disabled={!user}
+                className='inline-flex'
+            >
+              <Button size="icon" variant="ghost" className="group m-0.5 hover:bg-fill-secondary-hover" disabled={!user}>
                 <Search className="h-5 w-5" />
                 <span className="absolute -bottom-1 right-8 transform translate-y-full bg-fill-secondary text-xs text-text-secondary px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
                   Search
                 </span>
               </Button>
+            </DisabledToolTip>
               
-              <Button size="icon" variant="ghost" className="group m-0.5 hover:bg-fill-secondary-hover" disabled={!user}>
-              <File className="h-5 w-5" />
-                <span className="absolute -bottom-1 left-7 transform translate-y-full bg-fill-secondary text-xs text-text-secondary px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
-                  New Chat
-                </span>
-              </Button>
+            <DisabledToolTip 
+              message="Please login to access"
+              disabled={!user}
+              className='inline-flex'
+            >
+                <Button size="icon" variant="ghost" className="group m-0.5 hover:bg-fill-secondary-hover" disabled={!user}>
+                <File className="h-5 w-5" />
+                  <span className="absolute -bottom-1 left-7 transform translate-y-full bg-fill-secondary text-xs text-text-secondary px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                    New Chat
+                  </span>
+                </Button>
+            </DisabledToolTip>
             </div>
 
             {/* Favorites & Recents */}
             <div className='bg-fill-secondary rounded-md flex'>
               {/* Favorites section */}
+              <DisabledToolTip 
+                message="Please login to access"
+                disabled={!user}
+              >
               <HoverDropdownMenu icon={Star} disabled={!user}>
                 <h3 className="text-overline-small text-text-secondary font-medium px-2 pt-2">FAVORITES</h3>
                 {favorites.map((item, index) => (
@@ -94,8 +111,13 @@ const Header = () => {
                   </React.Fragment>
                 ))}
               </HoverDropdownMenu>
+              </DisabledToolTip>
               
               {/* Recent chats section */}
+              <DisabledToolTip 
+                message="Please login to access"
+                disabled={!user}
+              >
               <HoverDropdownMenu icon={Clock} disabled={!user}>
                 <h3 className="text-overline-small text-text-secondary font-medium px-2 pt-2 pb-1">RECENTS</h3>
                 {recents.map((item, index) => (
@@ -109,6 +131,7 @@ const Header = () => {
                   </React.Fragment>
                 ))}
               </HoverDropdownMenu>
+              </DisabledToolTip>
             </div>
 
             {/* Circle Help */}

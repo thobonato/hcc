@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input"
 import CursorTooltip from '@/components/initial/CursorTooltip';
 import { ArrowUp } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
+import DisabledToolTip from '@/components/initial/DisabledToolTip';
 
 interface PromptBoxProps {
     onSubmit: (value: string) => void;
@@ -31,23 +32,30 @@ interface PromptBoxProps {
         <div>
             {/* chat box */}
             <div className="relative flex items-center">
-            <Input
-                type="text"
-                placeholder="Enter a SMILES string"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+            <DisabledToolTip 
+                message="Please login to access"
                 disabled={!user}
-                className="w-full h-12 px-4 bg-surface-main border-none focus-visible:ring-0 focus:border-gray-300 rounded-l-lg shadow-none"
-            />
-                <Button 
-                    onClick={handleSubmit} 
+                className='block w-full'
+            >
+                <Input
+                    type="text"
+                    placeholder="Enter a SMILES string"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+                    disabled={!user}
+                    className="w-full h-12 px-4 bg-surface-main border-none focus-visible:ring-0 focus:border-gray-300 rounded-l-lg shadow-none disabled:cursor-default"
+                />
+            </DisabledToolTip>
+                <Button
+                    onClick={handleSubmit}
                     disabled={!user}
                     className={`h-12 px-4 ${input ? 'bg-fill-primary' : 'bg-fill-primary-hover'} text-gray-50 shadow-none ml-1`}
                 >
                     <ArrowUp size={16}/>
                 </Button>
             </div>
+            
 
             {/* options */}
             <div className="flex items-center justify-between text-sm mt-2">
