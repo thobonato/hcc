@@ -5,6 +5,7 @@ import PromptBox from '@/components/initial/PromptBox';
 import ChatPanel from '@/components/chat/ChatPanel';
 import ModulePanel from '@/components/sidebar/modules/ModulePanel';
 import Logo from '@/components/initial/Logo';
+import Settings from '@/components/header/settings/Settings';
 import { useAuth } from '@/hooks/useAuth';
 
 const ChatInterface = () => {
@@ -14,6 +15,7 @@ const ChatInterface = () => {
   const [isOpen, setIsOpen] = useState(true);
   const [offsetHeight, setHeaderHeight] = useState(0);
   const user = useAuth();
+  const [isSettingsOpen, setIsSettingsOpen] = useState(true);
 
   const handleSubmit = (value: string) => {
     setIsLoading(true);
@@ -79,6 +81,22 @@ const ChatInterface = () => {
           </div>
         )
       )}
+
+      <Settings 
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        userData={{
+          fullName: user?.user?.user_metadata?.full_name || '',
+          email: user?.user?.user_metadata?.email || '',
+          birthday: {
+            month: '03',
+            day: '15',
+            year: '2002'
+          },
+          company: '',
+          occupation: ''
+        }}
+      />
     </div>
   );
 };
