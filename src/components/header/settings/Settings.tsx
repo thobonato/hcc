@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Logo from '@/components/initial/Logo';
+import AuthButton from '@/components/header/auth/AuthButton';
 
 interface SettingsProps {
   isOpen: boolean;
@@ -180,12 +181,12 @@ Target Protein (optional): {pdb_id}`}
             </div>
 
             <hr className='text-border-default'/>
-            <div className="mt-4 flex items-center space-x-2 text-sm px-6">
+            <div className="mt-2 flex items-center space-x-2 text-sm px-6">
               <div className="w-1.5 h-1.5 bg-black rounded-full"></div>
               <span>{userData.email}</span>
             </div>
   
-            <div className="mt-4 space-y-2 text-body-regular text-text-secondary">
+            <div className="mt-2 space-y-1 text-body-regular text-text-secondary">
             <hr className='text-border-default'/>
               <button 
                 onClick={() => setActiveTab('privacy')}
@@ -196,7 +197,9 @@ Target Protein (optional): {pdb_id}`}
               <hr className='text-border-default'/>
               <button className="block w-full text-left px-6">Terms of Service</button>
               <hr className='text-border-default'/>
-              <button className="block w-full text-left px-6">Logout</button>
+              <div className="block w-full text-left px-6">
+                <AuthButton/>
+              </div>
             </div>
           </div>
         </div>

@@ -15,7 +15,7 @@ const ChatInterface = () => {
   const [isOpen, setIsOpen] = useState(true);
   const [offsetHeight, setHeaderHeight] = useState(0);
   const user = useAuth();
-  const [isSettingsOpen, setIsSettingsOpen] = useState(true);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   const handleSubmit = (value: string) => {
     setIsLoading(true);
@@ -52,7 +52,9 @@ const ChatInterface = () => {
   return (
     <div className="h-screen w-full bg-surface-background flex flex-col overflow-hidden">
       <div className={`${isLoading ? 'hidden' : ''}`}>
-        <Header/>
+        <Header 
+          onOpenSettings={() => setIsSettingsOpen(true)}
+        />
       </div>
 
       {isFirstPrompt ? (
@@ -82,21 +84,23 @@ const ChatInterface = () => {
         )
       )}
 
-      <Settings 
-        isOpen={isSettingsOpen}
-        onClose={() => setIsSettingsOpen(false)}
-        userData={{
-          fullName: user?.user?.user_metadata?.full_name || '',
-          email: user?.user?.user_metadata?.email || '',
-          birthday: {
-            month: '03',
-            day: '15',
-            year: '2002'
-          },
-          company: '',
-          occupation: ''
-        }}
-      />
+      {user && (
+        <Settings 
+          isOpen={isSettingsOpen}
+          onClose={() => setIsSettingsOpen(false)}
+          userData={{
+            fullName: user?.user?.user_metadata?.full_name || '',
+            email: user?.user?.user_metadata?.email || '',
+            birthday: {
+              month: '03',
+              day: '15',
+              year: '2002'
+            },
+            company: '',
+            occupation: ''
+          }}
+        />
+      )}
     </div>
   );
 };

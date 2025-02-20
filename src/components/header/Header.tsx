@@ -12,7 +12,11 @@ import AuthButton from './auth/AuthButton';
 import { useAuth } from '@/hooks/useAuth';
 import DisabledToolTip from '@/components/initial/DisabledToolTip';
 
-const Header = () => {
+interface HeaderProps {
+  onOpenSettings: () => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ onOpenSettings }) => {
   const { user } = useAuth();
   const [favorites] = useState([
     'TRCA hybrid requires bonding t...',
@@ -44,7 +48,10 @@ const Header = () => {
                   {user?.user_metadata?.email} 
                 </DropdownMenuItem> 
                 <DropdownMenuSeparator className='bg-border-default -mx-0 my-0'/>
-                <DropdownMenuItem className="py-1 text-text-primary hover:bg-fill-secondary">
+                <DropdownMenuItem 
+                  className="py-1 text-text-primary hover:bg-fill-secondary"
+                  onClick={onOpenSettings}
+                >
                   Settings
                 </DropdownMenuItem>
                 <DropdownMenuSeparator className=' -mx-0 my-0'/>
