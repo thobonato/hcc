@@ -14,9 +14,11 @@ import DisabledToolTip from '@/components/initial/DisabledToolTip';
 
 interface HeaderProps {
   onOpenSettings: () => void;
+  onClickSearch: () => void;
+  onClickNewChat: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ onOpenSettings }) => {
+const Header: React.FC<HeaderProps> = ({ onOpenSettings, onClickSearch, onClickNewChat }) => {
   const { user } = useAuth();
   const [favorites] = useState([
     'TRCA hybrid requires bonding t...',
@@ -76,7 +78,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenSettings }) => {
                 disabled={!user}
                 className='inline-flex'
             >
-              <Button size="icon" variant="ghost" className="group m-0.5 hover:bg-fill-secondary-hover" disabled={!user}>
+              <Button size="icon" variant="ghost" className="group m-0.5 hover:bg-fill-secondary-hover" disabled={!user} onClick={onClickSearch}>
                 <Search className="h-5 w-5" />
                 <span className="absolute -bottom-1 right-8 transform translate-y-full bg-fill-secondary text-xs text-text-secondary px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
                   Search
@@ -89,7 +91,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenSettings }) => {
               disabled={!user}
               className='inline-flex'
             >
-                <Button size="icon" variant="ghost" className="group m-0.5 hover:bg-fill-secondary-hover" disabled={!user}>
+                <Button size="icon" variant="ghost" className="group m-0.5 hover:bg-fill-secondary-hover" disabled={!user} onClick={onClickNewChat}>
                 <File className="h-5 w-5" />
                   <span className="absolute -bottom-1 left-7 transform translate-y-full bg-fill-secondary text-xs text-text-secondary px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
                     New Chat

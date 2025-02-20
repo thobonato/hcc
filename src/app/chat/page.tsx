@@ -6,6 +6,7 @@ import ChatPanel from '@/components/chat/ChatPanel';
 import ModulePanel from '@/components/sidebar/modules/ModulePanel';
 import Logo from '@/components/initial/Logo';
 import Settings from '@/components/header/settings/Settings';
+import Search from '@/components/header/search/Search';
 import { useAuth } from '@/hooks/useAuth';
 
 const ChatInterface = () => {
@@ -16,6 +17,11 @@ const ChatInterface = () => {
   const [offsetHeight, setHeaderHeight] = useState(0);
   const user = useAuth();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  const openNewChat = () => {
+    window.location.reload();
+  };
 
   const handleSubmit = (value: string) => {
     setIsLoading(true);
@@ -54,6 +60,8 @@ const ChatInterface = () => {
       <div className={`${isLoading ? 'hidden' : ''}`}>
         <Header 
           onOpenSettings={() => setIsSettingsOpen(true)}
+          onClickSearch={() => setIsSearchOpen(true)}
+          onClickNewChat={() => openNewChat()}
         />
       </div>
 
@@ -99,6 +107,13 @@ const ChatInterface = () => {
             company: '',
             occupation: ''
           }}
+        />
+      )}
+
+      {user && (
+        <Search 
+          isOpen={isSearchOpen}
+          onClose={() => setIsSearchOpen(false)}
         />
       )}
     </div>
