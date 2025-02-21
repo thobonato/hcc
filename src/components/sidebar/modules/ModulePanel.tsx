@@ -4,7 +4,7 @@ import { Star, PanelRightClose } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Citations } from '@/components/sidebar/Citations';
-import { MoleculeViewer } from '@/components/sidebar/modules/MoleculeViewer';
+import { MoleculeViewer } from '@/components/sidebar/modules/molviewer/MoleculeViewer';
 import { DataTable } from '@/components/sidebar/modules/DataTable';
 import ModulesFooter from "@/components/sidebar/modules/ModulesSelector";
 import { Module } from "@/lib/types";
@@ -20,6 +20,7 @@ const ModulePanel = ({ onOpenChange }: ModulePanelProps) => {
   const [isOpen, setIsOpen] = useState(true);
   const [value, setValue] = useState("modules");
   const [showNewBadge, setShowNewBadge] = useState(true);  // Control badge visibility
+  const [isViewerFullscreen, setIsViewerFullscreen] = useState(false);  // Add this state
 
   const tabs: TabOption[] = [
     {
@@ -42,7 +43,7 @@ const ModulePanel = ({ onOpenChange }: ModulePanelProps) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowNewBadge(false);
-    }, 5000);
+    }, 10000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -111,20 +112,34 @@ const ModulePanel = ({ onOpenChange }: ModulePanelProps) => {
     }
   };
 
+  // Add effect to listen for fullscreen changes
+  useEffect(() => {
+    const handleFullscreenChange = (e: CustomEvent) => {
+      setIsViewerFullscreen(e.detail);
+    };
+
+    window.addEventListener('moleculeViewerFullscreen', handleFullscreenChange as EventListener);
+    return () => {
+      window.removeEventListener('moleculeViewerFullscreen', handleFullscreenChange as EventListener);
+    };
+  }, []);
+
   return (
     <div className="w-full relative pov">
       <div className="relative">
-        <Button 
-          className={`fixed top-4 right-4 z-[70] ${!isOpen ? 'bg-fill-secondary' : ''}`} 
-          variant="ghost" 
-          size="icon" 
-          onClick={handleToggle}
-        >
-          <PanelRightClose className={`w-5 h-5 text-black ${isOpen ? 'text-gray-500' : ''}`}/>
-        </Button>
+        {!isViewerFullscreen && (  // Add this condition
+          <Button 
+            className={`fixed top-4 right-4 z-[70] ${!isOpen ? 'bg-fill-secondary' : ''}`} 
+            variant="ghost" 
+            size="icon" 
+            onClick={handleToggle}
+          >
+            <PanelRightClose className={`w-5 h-5 text-black ${isOpen ? 'text-gray-500' : ''}`}/>
+          </Button>
+        )}
         {!isOpen && showNewBadge && (
-          <span className={`fixed mt-10 top-4 right-2 px-2 py-0.5 text-xs font-medium rounded ${'bg-green-50 text-text-green'}`}>
-            <span className="inline-block w-2 h-2 mr-1 bg-text-green rounded-full"></span>
+          <span className={`fixed mt-10 top-4 right-2 px-2 py-0.5 text-medium-12 font-medium rounded ${'bg-green-50 text-text-green'}`}>
+            <span className="inline-block w-2 h-2 mr-1 bg-text-green text-medium-12 rounded-full"></span>
             NEW
           </span>
         )}
@@ -143,9 +158,9 @@ const ModulePanel = ({ onOpenChange }: ModulePanelProps) => {
             <div className="h-full flex flex-col overflow-y-auto rounded-l-lg">
               
               {/* Header */}  
-              <div className="px-4 pt-2 flex justify-between items-center">
+              <div className="px-4 pt-4 flex justify-between items-center">
                 <div className="flex items-center gap-2">
-                  <h1 className="text-2xl font-normal tracking-tight">BENZENE</h1>
+                  <h1 className="text-heading font-[500] tracking-tight">BENZENE</h1>
                   <Star className="w-4 h-4" />
                 </div>
               </div>

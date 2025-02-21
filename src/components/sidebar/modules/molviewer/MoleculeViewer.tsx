@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button"
 import { Expand, Minimize, ChevronDown, ChevronUp } from 'lucide-react'
 import { useState, useEffect } from 'react'
-import BasicMolViewer from "@/components/sidebar/modules/BasicMolViewer"
-import Smiles2DViewer from "@/components/sidebar/modules/Smiles2DViewer"
+import Basic3DViewer from "@/components/sidebar/modules/molviewer/Basic3DViewer"
+import Smiles2DViewer from "@/components/sidebar/modules/molviewer/Smiles2DViewer"
 import { motion, AnimatePresence } from 'framer-motion'
 
 export const MoleculeViewer = () => {
@@ -23,6 +23,10 @@ export const MoleculeViewer = () => {
     };
   }, [isFullscreen]);
 
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent('moleculeViewerFullscreen', { detail: isFullscreen }));
+  }, [isFullscreen]);
+
   const toggleFullscreen = () => setIsFullscreen(!isFullscreen);
 
   const renderInfoBlurb = () => {
@@ -33,7 +37,7 @@ export const MoleculeViewer = () => {
         <h2 className="text-title text-text-primary">
           {view === "3D" ? dataPdb : "Molecule"}
         </h2>
-        <p className="text-body-regular text-text-secondary mb-2">
+        <p className="text-body-regular text-text-secondary">
           {view === "3D" 
             ? "Description of the 3D structure"
             : `SMILES: ${showMore 
@@ -47,7 +51,7 @@ export const MoleculeViewer = () => {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.2 }}
-              className="text-body-regular text-text-secondary overflow-hidden"
+              className="text-body-regular text-text-secondary overflow-hidden mt-1"
             >
               <p>Additional information about the molecule like properties, characteristics, etc.</p>
             </motion.div>
@@ -56,7 +60,7 @@ export const MoleculeViewer = () => {
         <Button
           variant="ghost"
           size="sm"
-          className="mt-1 text-text-primary"
+          className="text-text-primary p-0"
           onClick={() => setShowMore(!showMore)}
         >
           <div className="flex items-center">
@@ -74,7 +78,7 @@ export const MoleculeViewer = () => {
     <>
       {isFullscreen && (
         <div className="fixed inset-0 bg-surface-background z-50">
-          <div className="p-4 flex justify-between items-center">
+          <div className="p-3 flex justify-between items-center">
             <Button 
               variant="ghost" 
               size="icon" 
@@ -100,7 +104,7 @@ export const MoleculeViewer = () => {
           
           <div className="w-full h-[calc(100vh-80px)] relative">
             {view === "3D" && dataPdb && (
-              <BasicMolViewer 
+              <Basic3DViewer 
                 className="w-full h-full" 
                 dataPdb={dataPdb}
                 isFullscreen={isFullscreen}
@@ -120,7 +124,7 @@ export const MoleculeViewer = () => {
       )}
 
       <div className="w-full" style={{ visibility: isFullscreen ? 'hidden' : 'visible' }}>
-        <div className="p-4 flex justify-between items-center">
+        <div className="p-3 flex justify-between items-center">
           <Button 
             variant="ghost" 
             size="icon" 
@@ -146,7 +150,7 @@ export const MoleculeViewer = () => {
         
         <div className={`w-full relative ${isFullscreen ? 'h-[calc(100vh-80px)]' : 'h-[300px]'}`}>
           {view === "3D" && dataPdb && (
-            <BasicMolViewer 
+            <Basic3DViewer 
               className="absolute inset-0 w-full h-full" 
               dataPdb={dataPdb}
               isFullscreen={isFullscreen}

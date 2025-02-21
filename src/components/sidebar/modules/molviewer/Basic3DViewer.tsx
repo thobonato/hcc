@@ -6,13 +6,13 @@ declare global {
   }
 }
 
-interface BasicMolViewerProps {
+interface Basic3DViewerProps {
   className?: string;
   dataPdb?: string;
   isFullscreen?: boolean;
 }
 
-const BasicMolViewer: React.FC<BasicMolViewerProps> = ({ 
+const Basic3DViewer: React.FC<Basic3DViewerProps> = ({ 
   className, 
   dataPdb = "1ZRX", 
   isFullscreen = false 
@@ -98,4 +98,4 @@ const BasicMolViewer: React.FC<BasicMolViewerProps> = ({
   );
 };
 
-export default BasicMolViewer;
+export default Basic3DViewer;

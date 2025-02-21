@@ -12,7 +12,7 @@ interface PromptInputProps {
 const PromptInput = ({ value, onChange, onSubmit, placeholder = "Enter a SMILES string" }: PromptInputProps) => {
   return (
     <div className="px-12 pb-10">
-      <div className="max-w-4xl mx-auto flex items-center gap-2 h-12">
+      <div className="max-w-4xl mx-auto flex items-center h-12">
         <Input
           type="text"
           placeholder={placeholder}
@@ -23,7 +23,7 @@ const PromptInput = ({ value, onChange, onSubmit, placeholder = "Enter a SMILES 
         />
         <Button 
           onClick={onSubmit} 
-          className={`h-12 px-4 ${value.trim() ? 'bg-fill-primary' : 'bg-fill-primary-hover'} text-gray-50 shadow-none ml-1`}
+          className={`h-12 px-4 ${value.trim() ? 'bg-fill-primary' : 'bg-fill-primary-hover'} text-gray-50 shadow-none ml-[4px]`}
         >
           <ArrowUp size={16}/>
         </Button>

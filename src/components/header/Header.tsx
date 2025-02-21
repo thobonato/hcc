@@ -56,10 +56,6 @@ const Header: React.FC<HeaderProps> = ({ onOpenSettings, onClickSearch, onClickN
                 >
                   Settings
                 </DropdownMenuItem>
-                <DropdownMenuSeparator className=' -mx-0 my-0'/>
-                <DropdownMenuItem className="py-1 text-text-primary hover:bg-fill-secondary">
-                  Payments
-                </DropdownMenuItem>
                 <DropdownMenuSeparator className='bg-border-default -mx-0 my-0'/>
                 <DropdownMenuItem className="py-1 text-text-primary hover:bg-fill-secondary">
                   {/* Logout */}

@@ -1,8 +1,8 @@
 "use client";
 import { useState } from 'react';
 import Logo from '@/components/initial/Logo';
-import BasicMolViewer from '@/components/sidebar/modules/BasicMolViewer';
-import Smiles2DViewer from '@/components/sidebar/modules/Smiles2DViewer';
+import BasicMolViewer from '@/components/sidebar/modules/molviewer/Basic3DViewer';
+import Smiles2DViewer from '@/components/sidebar/modules/molviewer/Smiles2DViewer';
 import AuthButton from '@/components/header/auth/AuthButton';
 
 const Home = () => {
