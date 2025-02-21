@@ -91,8 +91,8 @@ Please feel free to ask further questions about the data that you see.`,
     };
 
     return (
-        <div className="flex-1 flex flex-col h-full overflow-hidden">
-            <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 flex flex-col h-full overflow-hidden relative">
+            <div className="flex-1 overflow-y-auto relative z-0">
                 <div className="px-12">
                     {showLogo && (
                         <div className="flex justify-center pt-12">
@@ -128,7 +128,7 @@ Please feel free to ask further questions about the data that you see.`,
                 </div>
             </div>
             
-            <div className="sticky bg-surface-background pt-4 bottom-0">
+            <div className="sticky bg-surface-background pt-4 bottom-0 z-0">
                 <PromptInput
                     value={input}
                     placeholder='Ask me anything...'

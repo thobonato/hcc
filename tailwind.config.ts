@@ -66,6 +66,44 @@ module.exports = {
 		  md: "calc(var(--radius) - 2px)",
 		  sm: "calc(var(--radius) - 4px)",
 		},
+		fontSize: {
+		  'title': ['40px', {
+			lineHeight: '40px',
+			fontWeight: '500',
+		  }],
+		  'heading': ['24px', {
+			lineHeight: '24px',
+			fontWeight: '600',
+		  }],
+		  'body-regular': ['14px', {
+			lineHeight: '14px',
+			fontWeight: '400',
+		  }],
+		  'body-medium': ['14px', {
+			lineHeight: '14px',
+			fontWeight: '500',
+		  }],
+		  'body-regular-12': ['12px', {
+			lineHeight: '14px',
+			fontWeight: '400',
+		  }],
+		  'body-medium-12': ['12px', {
+			lineHeight: '12px',
+			fontWeight: '500',
+		  }],
+		  'overline': ['14px', {
+			lineHeight: '16px',
+			fontWeight: '500',
+		  }],
+		  'overline-small': ['12px', {
+			lineHeight: '14px',
+			fontWeight: '400',
+		  }],
+		  'caption': ['10px', {
+			lineHeight: '12px',
+			fontWeight: '500',
+		  }],
+		},
 	  },
 	},
 	plugins: [

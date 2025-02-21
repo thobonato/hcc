@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { Expand, Minimize } from 'lucide-react'
+import { Expand, Minimize, ChevronDown, ChevronUp } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import BasicMolViewer from "@/components/sidebar/modules/BasicMolViewer"
 import Smiles2DViewer from "@/components/sidebar/modules/Smiles2DViewer"
@@ -10,6 +10,7 @@ export const MoleculeViewer = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [dataPdb, setDataPdb] = useState("1ZRX");
   const [dataSmiles, setDataSmiles] = useState("C1C[N+]2(CCC1[C@H](C2)OC(=O)C(C3=CC=CS3)(C4=CC=CS4)O)CCCOC5=CC=CC=C5");
+  const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
     if (isFullscreen) {
@@ -23,6 +24,51 @@ export const MoleculeViewer = () => {
   }, [isFullscreen]);
 
   const toggleFullscreen = () => setIsFullscreen(!isFullscreen);
+
+  const renderInfoBlurb = () => {
+    if (!isFullscreen) return null;
+    
+    return (
+      <div className="absolute bottom-6 left-6 bg-surface-main backdrop-blur-sm rounded-md p-4 w-[300px]">
+        <h2 className="text-title text-text-primary">
+          {view === "3D" ? dataPdb : "Molecule"}
+        </h2>
+        <p className="text-body-regular text-text-secondary mb-2">
+          {view === "3D" 
+            ? "Description of the 3D structure"
+            : `SMILES: ${showMore 
+                ? `\n${dataSmiles}` 
+                : `${dataSmiles.slice(0, 20)}...`}`}
+        </p>
+        <AnimatePresence>
+          {showMore && (
+            <motion.div 
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className="text-body-regular text-text-secondary overflow-hidden"
+            >
+              <p>Additional information about the molecule like properties, characteristics, etc.</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="mt-1 text-text-primary"
+          onClick={() => setShowMore(!showMore)}
+        >
+          <div className="flex items-center">
+            {showMore ? "LESS " : "MORE "}
+            <ChevronDown
+                className={`w-4 h-4 transform transition-transform duration-300 ${showMore ? 'rotate-180' : ''}`}
+            />
+          </div>
+        </Button>
+      </div>
+    );
+  };
 
   return (
     <>
@@ -52,7 +98,7 @@ export const MoleculeViewer = () => {
             </div>
           </div>
           
-          <div className="w-full h-[calc(100vh-80px)]">
+          <div className="w-full h-[calc(100vh-80px)] relative">
             {view === "3D" && dataPdb && (
               <BasicMolViewer 
                 className="w-full h-full" 
@@ -68,6 +114,7 @@ export const MoleculeViewer = () => {
                 />
               </div>
             )}
+            {renderInfoBlurb()}
           </div>
         </div>
       )}

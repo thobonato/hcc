@@ -73,31 +73,47 @@ const Header: React.FC<HeaderProps> = ({ onOpenSettings, onClickSearch, onClickN
           <div className="flex items-center space-x-1">
             {/* Search & New Chat*/}
             <div className='bg-fill-secondary rounded-md relative'>
-            <DisabledToolTip 
+              <DisabledToolTip 
                 message="Please login to access"
                 disabled={!user}
                 className='inline-flex'
-            >
-              <Button size="icon" variant="ghost" className="group m-0.5 hover:bg-fill-secondary-hover" disabled={!user} onClick={onClickSearch}>
-                <Search className="h-5 w-5" />
-                <span className="absolute -bottom-1 right-8 transform translate-y-full bg-fill-secondary text-xs text-text-secondary px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
-                  Search
-                </span>
-              </Button>
-            </DisabledToolTip>
-              
-            <DisabledToolTip 
-              message="Please login to access"
-              disabled={!user}
-              className='inline-flex'
-            >
-                <Button size="icon" variant="ghost" className="group m-0.5 hover:bg-fill-secondary-hover" disabled={!user} onClick={onClickNewChat}>
-                <File className="h-5 w-5" />
-                  <span className="absolute -bottom-1 left-7 transform translate-y-full bg-fill-secondary text-xs text-text-secondary px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
-                    New Chat
-                  </span>
+              >
+                <Button 
+                  size="icon" 
+                  variant="ghost" 
+                  className="group relative m-0.5 hover:bg-fill-secondary-hover" 
+                  disabled={!user} 
+                  onClick={onClickSearch}
+                >
+                  <Search className="h-5 w-5" />
+                  <div className="absolute z-50 top-full left-1/2 -translate-x-1/2 pt-2">
+                    <div className="pointer-events-none bg-fill-secondary text-xs text-text-secondary px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-150 whitespace-nowrap">
+                      Search
+                    </div>
+                  </div>
                 </Button>
-            </DisabledToolTip>
+              </DisabledToolTip>
+              
+              <DisabledToolTip 
+                message="Please login to access"
+                disabled={!user}
+                className='inline-flex'
+              >
+                <Button 
+                  size="icon" 
+                  variant="ghost" 
+                  className="group relative m-0.5 hover:bg-fill-secondary-hover" 
+                  disabled={!user} 
+                  onClick={onClickNewChat}
+                >
+                  <File className="h-5 w-5" />
+                  <div className="absolute z-50 top-full left-1/2 -translate-x-1/2 pt-2">
+                    <div className="pointer-events-none bg-fill-secondary text-xs text-text-secondary px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-150 whitespace-nowrap">
+                      New Chat
+                    </div>
+                  </div>
+                </Button>
+              </DisabledToolTip>
             </div>
 
             {/* Favorites & Recents */}

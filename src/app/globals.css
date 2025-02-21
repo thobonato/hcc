@@ -97,6 +97,12 @@
     line-height: 14px;
   }
 
+  .body-regular-12 {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 14px;
+  }
+
   .body-medium-12 {
     font-weight: 500;
     font-size: 12px;

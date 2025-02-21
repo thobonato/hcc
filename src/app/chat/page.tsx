@@ -8,6 +8,7 @@ import Logo from '@/components/initial/Logo';
 import Settings from '@/components/header/settings/Settings';
 import Search from '@/components/header/search/Search';
 import { useAuth } from '@/hooks/useAuth';
+import MobileNotice from '@/components/mobile/MobileNotice';
 
 const ChatInterface = () => {
   const [isFirstPrompt, setIsFirstPrompt] = useState(true);
@@ -18,6 +19,7 @@ const ChatInterface = () => {
   const user = useAuth();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const openNewChat = () => {
     window.location.reload();
@@ -40,11 +42,11 @@ const ChatInterface = () => {
     if (isLoading) {
       const timer = setTimeout(() => {
         setIsLoading(false);
-      }, 2000);
+      }, 3000);
 
       setTimeout(() => {
         setIsFirstPrompt(false);
-      }, 2000);
+      }, 3000);
       return () => clearTimeout(timer);
     }
   }, [isLoading]);
@@ -54,6 +56,20 @@ const ChatInterface = () => {
       setIsFirstPrompt(true);
     }
   }, [user]);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  if (isMobile) {
+    return <MobileNotice />;
+  }
 
   return (
     <div className="h-screen w-full bg-surface-background flex flex-col overflow-hidden">
@@ -68,7 +84,7 @@ const ChatInterface = () => {
       {isFirstPrompt ? (
         <div className="flex-1 flex flex-col items-center justify-center">
           <a href='/' className={`${isLoading ? 'absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2' : ''}`}>
-            <Logo className='max-w-32 max-h-32' stopLoop={!isLoading} playbackRate={isLoading ? 1.5 : 1}/>
+            <Logo className='max-w-32 max-h-32' stopLoop={!isLoading} playbackRate={isLoading ? 1.75 : 1}/>
           </a>
           
           <div className={`w-full max-w-2xl mt-8 ${isLoading ? 'hidden' : ''}`}>

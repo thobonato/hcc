@@ -16,8 +16,14 @@ const Logo: React.FC<LogoProps> = ({ loopDelay = 0, className, stopLoop = true, 
         const videoElement = videoRef.current;
         if (videoElement) {
             videoElement.playbackRate = playbackRate;
+            
+            // Reset and play the video when stopLoop changes
+            if (!stopLoop) {
+                videoElement.currentTime = 0;
+                videoElement.play();
+            }
         }
-    }, [playbackRate]);
+    }, [playbackRate, stopLoop]);
 
     useEffect(() => {
         const videoElement = videoRef.current;
@@ -54,7 +60,7 @@ const Logo: React.FC<LogoProps> = ({ loopDelay = 0, className, stopLoop = true, 
                 playsInline
                 muted
                 autoPlay
-                loop={false}
+                loop={!stopLoop}
                 onTimeUpdate={() => {
                     const videoElement = videoRef.current;
                     if (videoElement && !stopLoop && videoElement.currentTime >= 2.6) {
