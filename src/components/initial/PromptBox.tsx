@@ -74,7 +74,10 @@ interface PromptBoxProps {
                 </div>
             
                 <div className="relative group inline-block">
-                    <CursorTooltip />
+                    <CursorTooltip 
+                        placeholder="What's a SMILES string?" 
+                        message="A SMILES string (Simplified Molecular Input Line Entry System) is a text-based representation of a molecular structure. It encodes a molecule's atoms, bonds, and connectivity in a linear and human-readable format." 
+                    />
                 </div>
             </div>
         </div>

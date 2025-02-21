@@ -38,7 +38,7 @@ const AnimatedTabs = ({ tabs, value, className = "m-4" }: AnimatedTabsProps) => 
                 </span>
               )}
               {tab.count !== undefined && (
-                <span>({tab.count})</span>
+                <span className="-ml-1">({tab.count})</span>
               )}
             </div>
           </TabsTrigger>

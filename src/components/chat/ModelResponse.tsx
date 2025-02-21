@@ -21,6 +21,8 @@ const ModelResponse = ({
   onThumbsDown 
 }: ModelResponseProps) => {
   const [isCopied, setIsCopied] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
+  const [isDisliked, setIsDisliked] = useState(false);
 
   const handleCopy = async () => {
     try {
@@ -30,6 +32,18 @@ const ModelResponse = ({
     } catch (err) {
       console.error('Failed to copy:', err);
     }
+  };
+
+  const handleThumbsUp = () => {
+    setIsLiked(!isLiked);
+    setIsDisliked(false);
+    onThumbsUp?.();
+  };
+
+  const handleThumbsDown = () => {
+    setIsDisliked(!isDisliked);
+    setIsLiked(false);
+    onThumbsDown?.();
   };
 
   return (
@@ -49,7 +63,7 @@ const ModelResponse = ({
             <MarkdownRenderer content={content} />
           </div>
           </div>
-          <div className="flex gap-2 mt-4 pl-16">
+          <div className="flex gap-0 mt-3 pl-16">
             <Button 
               variant="ghost" 
               size="icon" 
@@ -70,17 +84,17 @@ const ModelResponse = ({
               variant="ghost" 
               size="icon" 
               className="text-text-secondary rounded-lg"
-              onClick={onThumbsUp}
+              onClick={handleThumbsUp}
             >
-              <ThumbsUp className="w-4 h-4" />
+              <ThumbsUp className={`w-4 h-4 ${isLiked ? "text-text-primary fill-icon-primary" : ""}`} />
             </Button>
             <Button 
               variant="ghost" 
               size="icon" 
-              className="text-text-secondary rounded-lg"
-              onClick={onThumbsDown}
+              className="text-text-secondary rounded-lg "
+              onClick={handleThumbsDown}
             >
-              <ThumbsDown className="w-4 h-4" />
+              <ThumbsDown className={`w-4 h-4 ${isDisliked ? "text-text-primary fill-icon-primary" : ""}`} />
             </Button>
         </div>
       </div>

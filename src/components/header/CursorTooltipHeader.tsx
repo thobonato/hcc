@@ -72,7 +72,7 @@ const CursorTooltip = () => {
             }}
             className="w-64 p-2 text-xs text-text-primary bg-fill-secondary rounded-sm whitespace-normal text-left font-normal"
           >
-            A SMILES string (Simplified Molecular Input Line Entry System) is a text-based representation of a molecular structure. It encodes a molecule's atoms, bonds, and connectivity in a linear and human-readable format.
+            Human Chemical Co. builds AI tools for the development of safe chemicals
           </motion.div>
         )}
       </AnimatePresence>

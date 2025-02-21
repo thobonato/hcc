@@ -73,7 +73,7 @@ const ChatInterface = () => {
 
   return (
     <div className="h-screen w-full bg-surface-background flex flex-col overflow-hidden">
-      <div className={`${isLoading ? 'hidden' : ''}`}>
+      <div className={`${isLoading ? 'hidden' : ''} relative z-50`}>
         <Header 
           onOpenSettings={() => setIsSettingsOpen(true)}
           onClickSearch={() => setIsSearchOpen(true)}
@@ -82,16 +82,18 @@ const ChatInterface = () => {
       </div>
 
       {isFirstPrompt ? (
-        <div className="flex-1 flex flex-col items-center justify-center">
-          <a href='/' className={`${isLoading ? 'absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2' : ''}`}>
-            <Logo className='max-w-32 max-h-32' stopLoop={!isLoading} playbackRate={isLoading ? 1.75 : 1}/>
-          </a>
-          
-          <div className={`w-full max-w-2xl mt-8 ${isLoading ? 'hidden' : ''}`}>
-            <PromptBox onSubmit={handleSubmit}/>
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-40">
+          <div className="flex flex-col items-center w-full max-w-xl">
+            <a href='/' className={`${isLoading ? 'absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2' : ''}`}>
+              <Logo className='max-w-32 max-h-32' stopLoop={!isLoading} playbackRate={isLoading ? 1.75 : 1}/>
+            </a>
+            
+            <div className={`w-full max-w-2xl ${isLoading ? 'hidden' : ''}`}>
+              <PromptBox onSubmit={handleSubmit}/>
+            </div>
           </div>
 
-          <div className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 text-sm text-text-secondary ${isLoading ? 'hidden' : ''}`}>
+          <div className={`fixed bottom-10 left-1/2 transform -translate-x-1/2 text-sm text-text-secondary ${isLoading ? 'hidden' : ''}`}>
             © Human Chemical Co, 2025
           </div>
         </div>

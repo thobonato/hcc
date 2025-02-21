@@ -1,8 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
-import { Info } from 'lucide-react';
+import { CircleHelp } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const CursorTooltip = () => {
+interface CursorTooltipProps {
+  message: string;
+  placeholder: string;
+}
+
+const CursorTooltip = ({ message, placeholder = "" }: CursorTooltipProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const triggerRef = useRef<HTMLDivElement>(null);
@@ -52,8 +57,8 @@ const CursorTooltip = () => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="flex items-center space-x-1 text-text-secondary">
-        <Info size={16} />
-        <span>What's a SMILES string?</span>
+        <CircleHelp size={16} />
+        <span>{placeholder}</span>
       </div>
       
       <AnimatePresence>
@@ -73,7 +78,7 @@ const CursorTooltip = () => {
             }}
             className="w-64 p-2 text-xs text-text-primary bg-fill-secondary rounded-sm pointer-events-none"
           >
-            A SMILES string (Simplified Molecular Input Line Entry System) is a text-based representation of a molecular structure. It encodes a molecule's atoms, bonds, and connectivity in a linear and human-readable format.
+            {message}
           </motion.div>
         )}
       </AnimatePresence>

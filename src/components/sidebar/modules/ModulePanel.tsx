@@ -1,4 +1,3 @@
-
 import { Tabs, TabsContent } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
 import { Star, PanelRightClose } from 'lucide-react'
@@ -11,7 +10,7 @@ import ModulesFooter from "@/components/sidebar/modules/ModulesSelector";
 import { Module } from "@/lib/types";
 import AnimatedTabs from "@/components/sidebar/modules/AnimatedTabs";
 import type { TabOption } from "@/lib/types"
-
+import InformationTab from "@/components/sidebar/modules/InformationTab";
 
 interface ModulePanelProps {
   onOpenChange?: (open: boolean) => void;
@@ -97,11 +96,14 @@ const ModulePanel = ({ onOpenChange }: ModulePanelProps) => {
       case 'Visuals':
         return <MoleculeViewer />;
       case 'Information':
-        return (
-          <div className="p-4 bg-surface-background rounded-lg m-4">
-            <p className="text-text-primary">Information to be placed here</p>
-          </div>
-        );
+        return <InformationTab chemicalInfo={{
+          formula: "C6H6",
+          description: "The benzene molecule is composed of six carbon atoms joined in a planar hexagonal ring with one hydrogen atom attached to each",
+          classification: "Hydrocarbon",
+          citations: [
+            { id: "22A", text: "Reference text here" }
+          ]
+        }} />;
       case 'Endpoints':
         return <DataTable />;
       default:
@@ -113,7 +115,7 @@ const ModulePanel = ({ onOpenChange }: ModulePanelProps) => {
     <div className="w-full relative pov">
       <div className="relative">
         <Button 
-          className={`fixed top-4 right-4 z-50 ${!isOpen ? 'bg-fill-secondary' : ''}`} 
+          className={`fixed top-4 right-4 z-[70] ${!isOpen ? 'bg-fill-secondary' : ''}`} 
           variant="ghost" 
           size="icon" 
           onClick={handleToggle}
@@ -131,7 +133,7 @@ const ModulePanel = ({ onOpenChange }: ModulePanelProps) => {
       <AnimatePresence>
         {isOpen && (
           <motion.div 
-            className="fixed top-2 right-2 bottom-2 w-[40%] bg-fill-secondary rounded-xl shadow-none overflow-y-auto"
+            className="fixed top-2 right-2 bottom-2 w-[40%] max-w-[570px] bg-fill-secondary rounded-xl shadow-none overflow-y-auto z-[60]"
             variants={panelVariants}
             initial="initial"
             animate="animate"

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AuthButton from '@/components/header/auth/AuthButton';
+import CursorTooltip from '@/components/initial/CursorTooltip';
 
 interface SettingsProps {
   isOpen: boolean;
@@ -185,7 +186,12 @@ const Settings: React.FC<SettingsProps> = ({
       className="space-y-6"
     >
       <div>
-        <label className="block text-overline text-text-secondary mb-2">CUSTOM INSTRUCTIONS</label>
+        <div className='flex items-center mb-2'>
+          <label className="block text-overline text-text-secondary mr-1">CUSTOM INSTRUCTIONS</label>
+          <CursorTooltip placeholder=""
+            message="Custom instructions are optional and will be used to guide the AI's responses. You can use this to specify the type of responses you want, or to provide additional context for the AI." 
+          />
+        </div>
         <textarea
           className="w-full p-3 bg-surface-main rounded-md h-[300px] text-body-regular"
           value={customInstructions}
@@ -240,7 +246,7 @@ const Settings: React.FC<SettingsProps> = ({
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
             transition={{ type: "spring", duration: 0.3 }}
-            className="bg-surface-background rounded-md shadow-lg w-3/5 h-3/5 flex overflow-hidden max-h-[90vh]"
+            className="bg-surface-background rounded-md shadow-lg w-3/5 h-3/5 flex overflow-hidden max-h-[90vh] min-w-[875px] min-h-[564px]"
           >
             {/* Sidebar */}
             <div className="w-1/4 bg-surface-background flex flex-col">
@@ -269,16 +275,18 @@ const Settings: React.FC<SettingsProps> = ({
 
               {/* Bottom section */}
               <div className="mt-auto">
-                <div className="pt-2 bg-surface-main m-2 rounded-lg">
+                <div className="pt-2 pb-1 bg-surface-main m-2 rounded-lg">
                   <div className="text-body-regular-12 text-text-secondary px-3">
                     Get unlimited responses, favorites, and extended chat history with <span className="text-purple-500">PRO</span>
                   </div>
                   <div className="text-body-regular-12 text-text-secondary mt-3 px-3">
                     Starting at <span className="text-text-primary">$15/month</span>
                   </div>
-                  <button className="w-full mt-2 py-2 bg-black text-text-primary-button text-body-regular rounded-sm">
-                    Upgrade
-                  </button>
+                  <div className='mx-1'>
+                    <button className="w-full mt-2 py-2 bg-black text-text-primary-button text-body-regular rounded-sm">
+                      Upgrade
+                    </button>
+                  </div>
                 </div>
 
                 <hr className='text-border-default'/>
@@ -340,7 +348,7 @@ const Settings: React.FC<SettingsProps> = ({
                   </div>
                 </div>
                 
-                <div className="mt-4 flex-1 overflow-y-auto">
+                <div className={`mt-4 flex-1 overflow-y-auto ${(activeTab === 'privacy' || activeTab === 'tos') ? 'mr-14 max-w-[510px]' : ''}`}>
                   <AnimatePresence mode="wait">
                     {activeTab === 'account' && renderAccountSettings()}
                     {activeTab === 'chat' && renderChatSettings()}

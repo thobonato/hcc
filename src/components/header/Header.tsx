@@ -33,7 +33,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenSettings, onClickSearch, onClickN
   ]);
 
   return (
-    <header className="w-full bg-surface-background">
+    <header className="w-full bg-surface-background z-50">
       <div className="max-w-screen p-6">
         <div className="flex items-center">
           

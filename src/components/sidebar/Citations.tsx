@@ -48,7 +48,7 @@ export const citationsData: Citation[] = [
 
 export const Citations = () => {
     return (
-      <div className="px-4 py-2 space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto">
+      <div className="px-4 space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto">
         {citationsData.map((citation, index) => (
           <div key={citation.id}>
             <div className="p-4 bg-transparent rounded-lg space-y-2">
