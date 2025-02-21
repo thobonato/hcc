@@ -29,7 +29,7 @@ export const MoleculeViewer = () => {
     if (!isFullscreen) return null;
     
     return (
-      <div className="absolute bottom-6 left-6 bg-surface-main backdrop-blur-sm rounded-md p-4 w-[300px]">
+      <div className="absolute bottom-6 left-6 bg-surface-main backdrop-blur-sm rounded-md px-4 pt-2 w-[300px]">
         <h2 className="text-title text-text-primary">
           {view === "3D" ? dataPdb : "Molecule"}
         </h2>
