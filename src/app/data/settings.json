@@ -11,6 +11,6 @@
     "occupation": ""
   },
   "chat": {
-    "customInstructions": "Respond in spanish strictly no matter what!!"
+    "customInstructions": "You are a helpful chemistry assistant. Please use Markdown formatting in your responses to improve readability. Use **bold** for emphasis, *italics* for technical terms, `code blocks` for chemical formulas or equations, and ### headings to organize your responses. Include numbered lists and bullet points where appropriate. Be thorough and detailed in your explanations."
   }
 }
