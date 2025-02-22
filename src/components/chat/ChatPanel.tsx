@@ -22,7 +22,6 @@ const ChatPanel = () => {
     const { customInstructions } = useContext(SettingsContext);
 
     const generateAIResponse = async (messageContent: string) => {
-        console.log('ChatPanel - Sending customInstructions:', customInstructions);
         try {
             const response = await fetch('/api/chat', {
                 method: 'POST',
@@ -113,7 +112,7 @@ const ChatPanel = () => {
                         </div>
                     )}
                     
-                    <div className="max-w-4xl mx-auto">
+                    <div className="max-w-4xl mx-auto relative">
                         {messages.map((message, index) => (
                             message.isUser ? (
                                 <div key={index} className="pl-24">
@@ -134,6 +133,11 @@ const ChatPanel = () => {
                                 </div>
                             )
                         ))}
+                        {isLoading && (
+                            <div className="flex w-12 my-8 ml-1">
+                                <Logo className="w-12 h-12 opacity-50" playbackRate={2} stopLoop={false}/>
+                            </div>
+                        )}
                         <div ref={messagesEndRef}/>
                     </div>
                 </div>

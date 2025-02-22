@@ -54,8 +54,8 @@ const ModelResponse = ({
             <Image 
               src={HCCLogo} 
               alt="HCC Logo" 
-              width={32} 
-              height={32}
+              width={30} 
+              height={30}
               className="opacity-50 mr-2"
             />
           </div>

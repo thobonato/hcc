@@ -10,6 +10,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
         let inCodeBlock = false;
         let codeBlockContent = '';
         let tableHeaders: string[] = [];
+        let currentListLevel = 0;
         
         return lines.reduce((elements: JSX.Element[], line, index) => {
             // Handle code blocks
@@ -53,15 +54,32 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
                 return [...elements, <div key={index} className={className}>{content}</div>];
             }
             
-            // Process lists with consistent typography
-            if (line.trim().match(/^[-*]\s/)) {
-                const content = line.trim().replace(/^[-*]\s/, '');
+            // Process ordered lists with nested content
+            const orderedListMatch = line.trim().match(/^(\d+)\.\s+(.*)/);
+            if (orderedListMatch) {
+                const [, number, content] = orderedListMatch;
                 const match = line.match(/^\s*/);
                 const indentation = match ? Math.floor(match[0].length / 2) : 0;
+                
                 return [...elements, (
-                    <div key={index} className={`ml-${indentation * 4} flex items-center my-0.5 text-body-regular`}>
-                        <span className="mr-2 text-gray-500">•</span>
-                        {processInlineFormatting(content)}
+                    <div key={index} className={`flex items-start ml-${indentation * 4} my-1 text-body-regular`}>
+                        <span className="mr-2 min-w-[1.5rem] text-body-medium">{number}.</span>
+                        <div className="flex-1">{processInlineFormatting(content)}</div>
+                    </div>
+                )];
+            }
+
+            // Process unordered lists with nested content
+            const unorderedListMatch = line.trim().match(/^[-*]\s+(.*)/);
+            if (unorderedListMatch) {
+                const [, content] = unorderedListMatch;
+                const match = line.match(/^\s*/);
+                const indentation = match ? Math.floor(match[0].length / 2) : 0;
+                
+                return [...elements, (
+                    <div key={index} className={`flex items-start ml-${indentation * 4} my-1 text-body-regular`}>
+                        <span className="mr-2 text-gray-500 min-w-[1rem]">•</span>
+                        <div className="flex-1">{processInlineFormatting(content)}</div>
                     </div>
                 )];
             }
@@ -94,19 +112,6 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
                 return [...elements, tableRow];
             }
             
-            // Process ordered lists
-            if (line.trim().match(/^\d+\.\s/)) {
-                const content = line.trim().replace(/^\d+\.\s/, '');
-                const match = line.match(/^\d+/);
-                const number = match ? match[0] : '';
-                return [...elements, (
-                    <div key={index} className="flex items-start ml-4 text-body-regular">
-                        <span className="mr-2 text-body-medium">{number}.</span>
-                        {processInlineFormatting(content)}
-                    </div>
-                )];
-            }
-            
             // Process blockquotes
             if (line.trim().startsWith('>')) {
                 const content = line.trim().replace(/^>\s?/, '');
@@ -128,20 +133,34 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
     };
 
     const processInlineFormatting = (text: string) => {
-        // Process inline code first to prevent conflicts
-        text = text.replace(/`(.*?)`/g, '<code class="bg-gray-100 px-1 rounded font-mono text-body-regular-12">$1</code>');
-        // Process bold with both ** and __ syntax
-        text = text.replace(/(\*\*|__)(.*?)\1/g, '<strong>$2</strong>');
+        // Create a temporary placeholder for code blocks
+        const codeBlocks: string[] = [];
+        text = text.replace(/`([^`]+)`/g, (match) => {
+            codeBlocks.push(match);
+            return `%%CODE${codeBlocks.length - 1}%%`;
+        });
+
+        // Process bold text with both ** and __ syntax
+        text = text.replace(/(\*\*|__)((?:[^*_]|\*(?!\*)|_(?!_))+?)\1/g, '<strong>$2</strong>');
+        
         // Process italic with both * and _ syntax
-        text = text.replace(/(\*|_)(.*?)\1/g, '<em>$2</em>');
+        text = text.replace(/(\*|_)((?:[^*_]|\*(?!\*)|_(?!_))+?)\1/g, '<em>$2</em>');
+        
         // Process strikethrough
-        text = text.replace(/~~(.*?)~~/g, '<del class="text-gray-500">$1</del>');
-        // Process links with title support
-        text = text.replace(/\[(.*?)\]\((.*?)(?:\s+"(.*?)")?\)/g, 
+        text = text.replace(/~~((?:[^~]|~(?!~))+?)~~/g, '<del class="text-gray-500">$1</del>');
+        
+        // Restore code blocks
+        text = text.replace(/%%CODE(\d+)%%/g, (_, index) => {
+            const code = codeBlocks[parseInt(index)];
+            return `<code class="bg-gray-100 px-1 rounded font-mono text-body-regular-12">${code.slice(1, -1)}</code>`;
+        });
+
+        // Process links and images (unchanged)
+        text = text.replace(/\[((?:(?!\]).)*?)\]\(((?:(?!\)).)*?)(?:\s+"(.*?)")?\)/g, 
             (_, text, url, title) => `<a href="${url}" title="${title || ''}" class="text-blue-500 hover:underline">${text}</a>`
         );
-        // Process inline images
-        text = text.replace(/!\[(.*?)\]\((.*?)(?:\s+"(.*?)")?\)/g,
+        
+        text = text.replace(/!\[((?:(?!\]).)*?)\]\(((?:(?!\)).)*?)(?:\s+"(.*?)")?\)/g,
             (_, alt, src, title) => `<img src="${src}" alt="${alt}" title="${title || ''}" class="inline-block max-h-96 rounded">`
         );
 
