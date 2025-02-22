@@ -9,6 +9,7 @@ import Settings from '@/components/header/settings/Settings';
 import Search from '@/components/header/search/Search';
 import { useAuth } from '@/hooks/useAuth';
 import MobileNotice from '@/components/mobile/MobileNotice';
+import { SettingsProvider } from '@/components/header/settings/SettingsContext';
 
 const ChatInterface = () => {
   const [isFirstPrompt, setIsFirstPrompt] = useState(true);
@@ -72,6 +73,7 @@ const ChatInterface = () => {
   }
 
   return (
+    <SettingsProvider>
     <div className="h-screen w-full bg-surface-background flex flex-col overflow-hidden">
       <div className={`${isLoading ? 'hidden' : ''} relative z-50`}>
         <Header 
@@ -135,6 +137,7 @@ const ChatInterface = () => {
         />
       )}
     </div>
+    </SettingsProvider>
   );
 };
 

@@ -1,0 +1,16 @@
+{
+  "account": {
+    "fullName": "Thomaz Bonato",
+    "email": "bonato@usc.edu",
+    "birthday": {
+      "month": "03",
+      "day": "15",
+      "year": "2002"
+    },
+    "company": "",
+    "occupation": ""
+  },
+  "chat": {
+    "customInstructions": "Respond in spanish strictly no matter what!!"
+  }
+}

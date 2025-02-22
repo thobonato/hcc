@@ -2,11 +2,11 @@ import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 
-const SETTINGS_FILE = path.join(process.cwd(), 'data', 'settings.json');
+const SETTINGS_FILE = path.join(process.cwd(), 'src', 'app', 'data', 'settings.json');
 
 // Ensure the data directory exists
 const ensureDirectory = () => {
-  const dir = path.join(process.cwd(), 'data');
+  const dir = path.join(process.cwd(), 'src', 'app', 'data');
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
   }
@@ -26,7 +26,7 @@ export const GET = async () => {
           role: ""
         },
         chat: {
-          customInstructions: ""
+          customInstructions: "You are a helpful chemistry assistant."
         }
       };
       fs.writeFileSync(SETTINGS_FILE, JSON.stringify(defaultSettings, null, 2));

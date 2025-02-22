@@ -1,13 +1,15 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useContext } from 'react';
 import Logo from '@/components/initial/Logo';
 import UserMessage from '@/components/chat/UserMessage';
 import ModelResponse from '@/components/chat/ModelResponse';
 import PromptInput from '@/components/chat/PromptInput';
+import { SettingsContext } from '@/components/header/settings/SettingsContext';
 
 interface Message {
     content: string;
     timestamp: string;
     isUser: boolean;
+    error?: boolean;
 }
 
 const ChatPanel = () => {
@@ -15,38 +17,48 @@ const ChatPanel = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [showLogo, setShowLogo] = useState(true);
     const [isRegenerating, setIsRegenerating] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const { customInstructions } = useContext(SettingsContext);
 
+    const generateAIResponse = async (messageContent: string) => {
+        console.log('ChatPanel - Sending customInstructions:', customInstructions);
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: messageContent,
+                    customInstructions,
+                    conversationHistory: messages.map(msg => ({
+                        role: msg.isUser ? 'user' : 'assistant',
+                        content: msg.content
+                    }))
+                })
+            });
 
-    const generateAIResponse = (messageContent: string) => {
-        return {
-            content: `# Testing Markdown Rendering
-Here's a **bold statement** about polymers and *italic emphasis* on key points.
+            if (!response.ok) {
+                throw new Error('Failed to get AI response');
+            }
 
-### Key Features:
-- First feature with some \`inline code\`
-- Second feature with a [link](https://example.com)
-- Third feature with ~~strikethrough~~ text
-
-#### Results Table
-| Property | Value | Unit |
-|----------|-------|------|
-| Weight | 45.2 | kDa |
-| Length | 120 | nm |
-
-> Important note: This is a blockquote about the polymer structure.
-
-1. First ordered step
-2. Second ordered step
-   - Sub-point A
-   - Sub-point B
-
-You can view this in the polymer 3d model. I will make this module visible in your sidebar now. I will highlight it there.
-
-Please feel free to ask further questions about the data that you see.`,
-            timestamp: "1m ago",
-            isUser: false
-        };
+            const data = await response.json();
+            
+            return {
+                content: data.message,
+                timestamp: new Date().toLocaleTimeString(),
+                isUser: false
+            };
+        } catch (error) {
+            console.error('Error getting AI response:', error);
+            return {
+                content: "I apologize, but I encountered an error processing your request. Please try again.",
+                timestamp: new Date().toLocaleTimeString(),
+                isUser: false,
+                error: true
+            };
+        }
     };
     
     const scrollToBottom = () => {
@@ -57,22 +69,21 @@ Please feel free to ask further questions about the data that you see.`,
         scrollToBottom();
       }, [messages]);      
 
-    const handleSubmit = (regenerateIndex?: number) => {
+    const handleSubmit = async (regenerateIndex?: number) => {
         if (regenerateIndex !== undefined && !isRegenerating) {
             setIsRegenerating(true);
             const userMessage = messages[regenerateIndex - 1]?.content || "";
             
-            setTimeout(() => {
-                const newMessages = [...messages];
-                newMessages[regenerateIndex] = generateAIResponse(userMessage);
-                setMessages(newMessages);
-                setIsRegenerating(false);
-                scrollToBottom();
-            }, 1000);
+            const aiResponse = await generateAIResponse(userMessage);
+            const newMessages = [...messages];
+            newMessages[regenerateIndex] = aiResponse;
+            setMessages(newMessages);
+            setIsRegenerating(false);
+            scrollToBottom();
             return;
         }
 
-        if (!input.trim()) return;
+        if (!input.trim() || isLoading) return;
 
         const newMessage: Message = {
             content: input,
@@ -83,11 +94,11 @@ Please feel free to ask further questions about the data that you see.`,
         setMessages([...messages, newMessage]);
         setInput("");
         setShowLogo(false);
+        setIsLoading(true);
 
-        setTimeout(() => {
-            const aiResponse = generateAIResponse(input);
-            setMessages(prev => [...prev, aiResponse]);
-        }, 1000);
+        const aiResponse = await generateAIResponse(input);
+        setMessages(prev => [...prev, aiResponse]);
+        setIsLoading(false);
     };
 
     return (

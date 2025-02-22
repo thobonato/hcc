@@ -36,7 +36,7 @@ const Settings: React.FC<SettingsProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<'account' | 'chat' | 'privacy' | 'tos'>('account');
   const [formData, setFormData] = useState(userData);
-  const [customInstructions, setCustomInstructions] = useState(`You are a highly skilled chemist...`);
+  const [customInstructions, setCustomInstructions] = useState("You are a helpful chemistry assistant. Please use Markdown formatting in your responses to improve readability. Use **bold** for emphasis, *italics* for technical terms, `code blocks` for chemical formulas or equations, and ### headings to organize your responses. Include numbered lists and bullet points where appropriate. Be thorough and detailed in your explanations.");
   const [hasChanges, setHasChanges] = useState(false);
   
   useEffect(() => {
@@ -239,7 +239,7 @@ const Settings: React.FC<SettingsProps> = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-surface-backdrops flex items-center justify-center z-50 p-10"
+          className="fixed inset-0 bg-surface-backdrops flex items-center justify-center z-[100] p-10"
         >
           <motion.div 
             initial={{ scale: 0.95, opacity: 0 }}
