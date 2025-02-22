@@ -42,7 +42,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenSettings, onClickSearch, onClickN
           
           {/* If not signed in, show log in button */}
           {!user ? <AuthButton/> : (
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2 mr-1">
               {/* Profile Section */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
