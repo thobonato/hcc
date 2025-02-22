@@ -4,8 +4,11 @@ import { Search, File, Star, Clock } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import CursorTooltip from '@/components/header/CursorTooltipHeader';
 import {
+  DropdownMenu,
+  DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import HoverDropdownMenu from '@/components/header/HoverDropdownMenu';
 import AuthButton from './auth/AuthButton';
@@ -39,29 +42,44 @@ const Header: React.FC<HeaderProps> = ({ onOpenSettings, onClickSearch, onClickN
           
           {/* If not signed in, show log in button */}
           {!user ? <AuthButton/> : (
-            <div className="flex items-center space-x-2 ">
+            <div className="flex items-center space-x-2">
               {/* Profile Section */}
-              <HoverDropdownMenu 
-                image={user?.user_metadata?.avatar_url}
-              >
-                {/* User email display */}
-                <DropdownMenuItem className="py-1 text-text-primary bg-fill-secondary-header">
-                  <span className="bg-fill-primary rounded-full p-1"></span>
-                  {user?.user_metadata?.email} 
-                </DropdownMenuItem> 
-                <DropdownMenuSeparator className='bg-border-header -mx-0 my-0'/>
-                <DropdownMenuItem 
-                  className="py-1 text-text-primary bg-fill-secondary-header hover:bg-border-header"
-                  onClick={onOpenSettings}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    className="h-8 w-8 rounded-full overflow-hidden p-0"
+                  >
+                    <img 
+                      src={user?.user_metadata?.avatar_url} 
+                      alt="Profile" 
+                      className="h-full w-full object-cover"
+                    />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="bg-fill-secondary gap-0 p-0 mt-1.5" 
+                  align="start"
                 >
-                  Settings
-                </DropdownMenuItem>
-                <DropdownMenuSeparator className='bg-border-header -mx-0 my-0'/>
-                <DropdownMenuItem className="py-1 text-text-primary bg-fill-secondary-header hover:bg-border-header">
-                  {/* Logout */}
-                  <AuthButton/>
-                </DropdownMenuItem>
-              </HoverDropdownMenu>
+                  {/* User email display */}
+                  <DropdownMenuItem className="py-1 text-text-primary bg-fill-secondary-header">
+                    <span className="bg-fill-primary rounded-full p-1"></span>
+                    {user?.user_metadata?.email} 
+                  </DropdownMenuItem> 
+                  <DropdownMenuSeparator className='bg-border-header -mx-0 my-0'/>
+                  <DropdownMenuItem 
+                    className="py-1 text-text-primary bg-fill-secondary-header hover:bg-border-header"
+                    onClick={onOpenSettings}
+                  >
+                    Settings
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator className='bg-border-header -mx-0 my-0'/>
+                  <DropdownMenuItem className="py-1 text-text-primary bg-fill-secondary-header hover:bg-border-header">
+                    {/* Logout */}
+                    <AuthButton/>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           )}
 
@@ -119,19 +137,33 @@ const Header: React.FC<HeaderProps> = ({ onOpenSettings, onClickSearch, onClickN
                 message="Please login to access"
                 disabled={!user}
               >
-              <HoverDropdownMenu icon={Star} disabled={!user}>
-                <h3 className="text-overline-small text-text-secondary font-medium px-2 pt-2">FAVORITES</h3>
-                {favorites.map((item, index) => (
-                  <React.Fragment key={index}>
-                    <DropdownMenuItem className="py-1 text-text-primary bg-fill-secondary-header hover:bg-border-header">
-                      {item}
-                    </DropdownMenuItem>
-                    {index < favorites.length - 1 && 
-                      <DropdownMenuSeparator className='bg-border-header -mx-0 my-0'/>
-                    }
-                  </React.Fragment>
-                ))}
-              </HoverDropdownMenu>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild disabled={!user}>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className={`flex justify-center items-center transition-colors duration-200 m-0.5 ${!user ? 'cursor-not-allowed opacity-50' : 'hover:bg-fill-secondary-hover'}`}
+                    >
+                      <Star className="h-5 w-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent 
+                    className="bg-fill-secondary gap-0 p-0 mt-1"
+                    align="start"
+                  >
+                    <h3 className="text-overline-small text-text-secondary font-medium px-2 pt-2">FAVORITES</h3>
+                    {favorites.map((item, index) => (
+                      <React.Fragment key={index}>
+                        <DropdownMenuItem className="py-1 text-text-primary bg-fill-secondary-header hover:bg-border-header">
+                          {item}
+                        </DropdownMenuItem>
+                        {index < favorites.length - 1 && 
+                          <DropdownMenuSeparator className='bg-border-header -mx-0 my-0'/>
+                        }
+                      </React.Fragment>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </DisabledToolTip>
               
               {/* Recent chats section */}
@@ -139,19 +171,33 @@ const Header: React.FC<HeaderProps> = ({ onOpenSettings, onClickSearch, onClickN
                 message="Please login to access"
                 disabled={!user}
               >
-              <HoverDropdownMenu icon={Clock} disabled={!user}>
-                <h3 className="text-overline-small text-text-secondary font-medium px-2 pt-2 pb-1">RECENTS</h3>
-                {recents.map((item, index) => (
-                  <React.Fragment key={index}>
-                    <DropdownMenuItem className="py-1 text-text-primary bg-fill-secondary-header hover:bg-border-header">
-                      {item}
-                    </DropdownMenuItem>
-                    {index < recents.length - 1 && 
-                      <DropdownMenuSeparator className='bg-border-header -mx-0 my-0'/>
-                    }
-                  </React.Fragment>
-                ))}
-              </HoverDropdownMenu>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild disabled={!user}>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className={`flex justify-center items-center transition-colors duration-200 m-0.5 ${!user ? 'cursor-not-allowed opacity-50' : 'hover:bg-fill-secondary-hover'}`}
+                    >
+                      <Clock className="h-5 w-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent 
+                    className="bg-fill-secondary gap-0 p-0 mt-1"
+                    align="start"
+                  >
+                    <h3 className="text-overline-small text-text-secondary font-medium px-2 pt-2 pb-1">RECENTS</h3>
+                    {recents.map((item, index) => (
+                      <React.Fragment key={index}>
+                        <DropdownMenuItem className="py-1 text-text-primary bg-fill-secondary-header hover:bg-border-header">
+                          {item}
+                        </DropdownMenuItem>
+                        {index < recents.length - 1 && 
+                          <DropdownMenuSeparator className='bg-border-header -mx-0 my-0'/>
+                        }
+                      </React.Fragment>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </DisabledToolTip>
             </div>
 

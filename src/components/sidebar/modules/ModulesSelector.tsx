@@ -56,16 +56,35 @@ const ModulesFooter = ({
 
   return (
     <div className="relative">
+        <div className="p-4 pt-2 sticky bottom-0 bg-background z-10">
+            <button
+                onClick={toggleExpanded}
+                className="w-full flex justify-between items-center text-body-regular text-text-primary bg-fill-secondary-modules hover:bg-fill-secondary-emphasis transition-colors px-4 py-4 rounded-lg"
+            >
+                <span>
+                    {selectedModules.length} Module{selectedModules.length !== 1 ? 's' : ''} Selected 
+                    <span className="text-text-secondary">
+                        {selectedModules.length === availableModules.filter(m => m.isDefault).length && 
+                         selectedModules.every(m => m.isDefault) ? ' (Default)' : ''}
+                    </span>
+                </span>
+                <ChevronDown
+                    className={`w-4 h-4 transform transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
+                />
+            </button>
+            <div ref={modulesEndRef}/>
+        </div>
+
         <AnimatePresence>
             {isExpanded && (
                 <motion.div
-                    initial={{ opacity: 0, y: -10 }}
+                    initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
+                    exit={{ opacity: 0, y: 10 }}
                     transition={{ duration: 0.3 }}
-                    className="relative bottom-full w-full p-4 pb-0"
+                    className="absolute bottom-full w-full p-4 pb-0"
                 >
-                    <div className="bg-fill-secondary rounded-lg py-2">
+                    <div className="bg-fill-secondary-modules rounded-lg py-2">
                         <div className="space-y-2">
                             {Object.entries(modulesByName).map(([name, modules], index, array) => (
                                 <div key={name}>
@@ -91,25 +110,6 @@ const ModulesFooter = ({
                 </motion.div>
             )}
         </AnimatePresence>
-        
-        <div className="p-4 pt-2">
-            <button
-                onClick={toggleExpanded}
-                className="w-full flex justify-between items-center text-body-regular text-text-primary bg-fill-secondary hover:bg-fill-secondary-emphasis transition-colors px-4 py-4 rounded-lg"
-            >
-                <span>
-                    {selectedModules.length} Module{selectedModules.length !== 1 ? 's' : ''} Selected 
-                    <span className="text-text-secondary">
-                        {selectedModules.length === availableModules.filter(m => m.isDefault).length && 
-                         selectedModules.every(m => m.isDefault) ? ' (Default)' : ''}
-                    </span>
-                </span>
-                <ChevronDown
-                    className={`w-4 h-4 transform transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
-                />
-            </button>
-            <div ref={modulesEndRef}/>
-        </div>
     </div>
   );
 };

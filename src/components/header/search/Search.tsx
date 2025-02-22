@@ -69,7 +69,7 @@ const Search: React.FC<SearchProps> = ({ isOpen, onClose }) => {
         <AnimatePresence>
             {isOpen && (
                 <motion.div
-                    className="fixed inset-0 bg-surface-backdrops flex items-center justify-center z-50 p-10"
+                    className="fixed inset-0 bg-surface-backdrops flex items-center justify-center z-[100] p-10"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
