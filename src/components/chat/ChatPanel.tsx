@@ -112,17 +112,17 @@ const ChatPanel = () => {
                         </div>
                     )}
                     
-                    <div className="max-w-4xl mx-auto relative">
+                    <div className="max-w-[770px] mx-auto relative">
                         {messages.map((message, index) => (
                             message.isUser ? (
-                                <div key={index} className="pl-24">
+                                <div key={index} className="pl-[270px]">
                                     <UserMessage
                                         content={message.content}
                                         timestamp={message.timestamp}
                                     />
                                 </div>
                             ) : (
-                                <div key={index} className="pr-24">
+                                <div key={index} className="pr-10">
                                     <ModelResponse
                                         content={message.content}
                                         timestamp={message.timestamp}

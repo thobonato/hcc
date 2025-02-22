@@ -39,25 +39,25 @@ const Header: React.FC<HeaderProps> = ({ onOpenSettings, onClickSearch, onClickN
           
           {/* If not signed in, show log in button */}
           {!user ? <AuthButton/> : (
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2 ">
               {/* Profile Section */}
               <HoverDropdownMenu 
                 image={user?.user_metadata?.avatar_url}
               >
                 {/* User email display */}
-                <DropdownMenuItem className="py-1 text-text-primary">
+                <DropdownMenuItem className="py-1 text-text-primary bg-fill-secondary-header">
                   <span className="bg-fill-primary rounded-full p-1"></span>
                   {user?.user_metadata?.email} 
                 </DropdownMenuItem> 
-                <DropdownMenuSeparator className='bg-border-default -mx-0 my-0'/>
+                <DropdownMenuSeparator className='bg-border-header -mx-0 my-0'/>
                 <DropdownMenuItem 
-                  className="py-1 text-text-primary hover:bg-fill-secondary"
+                  className="py-1 text-text-primary bg-fill-secondary-header hover:bg-border-header"
                   onClick={onOpenSettings}
                 >
                   Settings
                 </DropdownMenuItem>
-                <DropdownMenuSeparator className='bg-border-default -mx-0 my-0'/>
-                <DropdownMenuItem className="py-1 text-text-primary hover:bg-fill-secondary">
+                <DropdownMenuSeparator className='bg-border-header -mx-0 my-0'/>
+                <DropdownMenuItem className="py-1 text-text-primary bg-fill-secondary-header hover:bg-border-header">
                   {/* Logout */}
                   <AuthButton/>
                 </DropdownMenuItem>
@@ -68,7 +68,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenSettings, onClickSearch, onClickN
           {/* Actions */}
           <div className="flex items-center space-x-1">
             {/* Search & New Chat*/}
-            <div className='bg-fill-secondary rounded-md relative'>
+            <div className='bg-fill-secondary-header rounded-md relative'>
               <DisabledToolTip 
                 message="Please login to access"
                 disabled={!user}
@@ -83,7 +83,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenSettings, onClickSearch, onClickN
                 >
                   <Search className="h-5 w-5" />
                   <div className="absolute z-50 top-full left-1/2 -translate-x-1/2 pt-2">
-                    <div className="pointer-events-none bg-fill-secondary text-xs text-text-secondary px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-150 whitespace-nowrap">
+                    <div className="pointer-events-none bg-fill-secondary-header text-xs text-text-secondary px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-150 whitespace-nowrap">
                       Search
                     </div>
                   </div>
@@ -123,11 +123,11 @@ const Header: React.FC<HeaderProps> = ({ onOpenSettings, onClickSearch, onClickN
                 <h3 className="text-overline-small text-text-secondary font-medium px-2 pt-2">FAVORITES</h3>
                 {favorites.map((item, index) => (
                   <React.Fragment key={index}>
-                    <DropdownMenuItem className="py-1 text-text-primary hover:bg-fill-secondary">
+                    <DropdownMenuItem className="py-1 text-text-primary bg-fill-secondary-header hover:bg-border-header">
                       {item}
                     </DropdownMenuItem>
                     {index < favorites.length - 1 && 
-                      <DropdownMenuSeparator className='bg-border-default -mx-0 my-0'/>
+                      <DropdownMenuSeparator className='bg-border-header -mx-0 my-0'/>
                     }
                   </React.Fragment>
                 ))}
@@ -143,11 +143,11 @@ const Header: React.FC<HeaderProps> = ({ onOpenSettings, onClickSearch, onClickN
                 <h3 className="text-overline-small text-text-secondary font-medium px-2 pt-2 pb-1">RECENTS</h3>
                 {recents.map((item, index) => (
                   <React.Fragment key={index}>
-                    <DropdownMenuItem className="py-1 text-text-primary hover:bg-fill-secondary">
+                    <DropdownMenuItem className="py-1 text-text-primary bg-fill-secondary-header hover:bg-border-header">
                       {item}
                     </DropdownMenuItem>
                     {index < recents.length - 1 && 
-                      <DropdownMenuSeparator className='bg-border-default -mx-0 my-0'/>
+                      <DropdownMenuSeparator className='bg-border-header -mx-0 my-0'/>
                     }
                   </React.Fragment>
                 ))}

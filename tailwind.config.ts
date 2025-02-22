@@ -33,12 +33,14 @@ module.exports = {
 			// Fill colors
 			'fill-primary': 'rgb(0 0 0 / <alpha-value>)',
 			'fill-primary-hover': 'rgb(204 204 204 / <alpha-value>)',
+			'fill-secondary-header' : 'rgb(245 245 245 / <alpha-value>)',
 			'fill-secondary': 'rgb(0 0 0 / 0.04)',
 			'fill-secondary-emphasis': 'rgb(255 255 255 / <alpha-value>)',
 			'fill-secondary-hover': 'rgb(255 255 255 / <alpha-value>)',
 
 			// Border colors
 			'border-default': 'rgb(0 0 0 / 0.04)',
+			'border-header': 'rgb(235 235 235 / <alpha-value>)',
 			
 			// Text colors
 			'text-primary': 'rgb(0 0 0 / <alpha-value>)',         

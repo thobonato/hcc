@@ -10,7 +10,6 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
         let inCodeBlock = false;
         let codeBlockContent = '';
         let tableHeaders: string[] = [];
-        let currentListLevel = 0;
         
         return lines.reduce((elements: JSX.Element[], line, index) => {
             // Handle code blocks
@@ -61,25 +60,26 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
                 const match = line.match(/^\s*/);
                 const indentation = match ? Math.floor(match[0].length / 2) : 0;
                 
+                // Process the content through inline formatting before rendering the list item
+                const formattedContent = processInlineFormatting(content);
+                
                 return [...elements, (
                     <div key={index} className={`flex items-start ml-${indentation * 4} my-1 text-body-regular`}>
                         <span className="mr-2 min-w-[1.5rem] text-body-medium">{number}.</span>
-                        <div className="flex-1">{processInlineFormatting(content)}</div>
+                        <div className="flex-1">{formattedContent}</div>
                     </div>
                 )];
             }
 
-            // Process unordered lists with nested content
-            const unorderedListMatch = line.trim().match(/^[-*]\s+(.*)/);
-            if (unorderedListMatch) {
-                const [, content] = unorderedListMatch;
+            // Process lists with consistent typography
+            if (line.trim().match(/^[-*]\s/)) {
+                const content = line.trim().replace(/^[-*]\s/, '');
                 const match = line.match(/^\s*/);
                 const indentation = match ? Math.floor(match[0].length / 2) : 0;
-                
                 return [...elements, (
-                    <div key={index} className={`flex items-start ml-${indentation * 4} my-1 text-body-regular`}>
-                        <span className="mr-2 text-gray-500 min-w-[1rem]">•</span>
-                        <div className="flex-1">{processInlineFormatting(content)}</div>
+                    <div key={index} className={`ml-${indentation * 4} flex items-center my-0.5 text-body-regular`}>
+                        <span className="mr-2 text-gray-500">•</span>
+                        {processInlineFormatting(content)}
                     </div>
                 )];
             }

@@ -70,7 +70,7 @@ const CursorTooltip = () => {
               left: tooltipPosition.x,
               top: tooltipPosition.y,
             }}
-            className="w-64 p-2 text-xs text-text-primary bg-fill-secondary rounded-sm whitespace-normal text-left font-normal"
+            className="w-64 p-2 text-xs text-text-primary bg-fill-secondary-header rounded-sm whitespace-normal text-left font-normal"
           >
             Human Chemical Co. builds AI tools for the development of safe chemicals
           </motion.div>
