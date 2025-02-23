@@ -11,16 +11,34 @@ import { Module } from "@/lib/types";
 import AnimatedTabs from "@/components/sidebar/modules/AnimatedTabs";
 import type { TabOption } from "@/lib/types"
 import InformationTab from "@/components/sidebar/modules/InformationTab";
+import { EndpointData } from '@/components/sidebar/modules/DataTable'
 
 interface ModulePanelProps {
   onOpenChange?: (open: boolean) => void;
+}
+
+interface ApiResponse {
+  molecule: {
+    name: string;
+    formula: string;
+    smiles: string;
+    pdb: string;
+  };
+  information: {
+    description: string;
+    additional_info: string;
+    formula: string;
+    classification: string;
+  };
+  endpoints: EndpointData[];
 }
 
 const ModulePanel = ({ onOpenChange }: ModulePanelProps) => {
   const [isOpen, setIsOpen] = useState(true);
   const [value, setValue] = useState("modules");
   const [showNewBadge, setShowNewBadge] = useState(true);  // Control badge visibility
-  const [isViewerFullscreen, setIsViewerFullscreen] = useState(false);  // Add this state
+  const [apiData, setApiData] = useState<ApiResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const tabs: TabOption[] = [
     {
@@ -92,51 +110,58 @@ const ModulePanel = ({ onOpenChange }: ModulePanelProps) => {
     }
   };
 
+  // Replace multiple fetch calls with single API call
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('/api/endpoint');
+        const data = await response.json();
+        setApiData(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const renderModuleContent = (module: Module) => {
+    if (isLoading || !apiData) return <div>Loading...</div>;
+
     switch (module.name) {
       case 'Visuals':
-        return <MoleculeViewer />;
+        return <MoleculeViewer 
+          pdb={apiData.molecule.pdb}
+          smiles={apiData.molecule.smiles}
+        />;
       case 'Information':
         return <InformationTab chemicalInfo={{
-          formula: "C6H6",
-          description: "The benzene molecule is composed of six carbon atoms joined in a planar hexagonal ring with one hydrogen atom attached to each",
-          classification: "Hydrocarbon",
-          citations: [
-            { id: "22A", text: "Reference text here" }
-          ]
+          formula: apiData.information.formula,
+          description: apiData.information.description,
+          classification: apiData.information.classification,
+          citations: [{ id: "22A", text: "Reference text here" }],
+          additional_info: apiData.information.additional_info
         }} />;
       case 'Endpoints':
-        return <DataTable />;
+        return <DataTable data={apiData.endpoints} loading={isLoading} />;
       default:
         return null;
     }
   };
 
-  // Add effect to listen for fullscreen changes
-  useEffect(() => {
-    const handleFullscreenChange = (e: CustomEvent) => {
-      setIsViewerFullscreen(e.detail);
-    };
-
-    window.addEventListener('moleculeViewerFullscreen', handleFullscreenChange as EventListener);
-    return () => {
-      window.removeEventListener('moleculeViewerFullscreen', handleFullscreenChange as EventListener);
-    };
-  }, []);
-
   return (
     <div className="w-full relative pov">
       <div className="relative">
-        {!isViewerFullscreen && (  // Add this condition
-          <Button 
-            className={`fixed top-4 right-4 z-[70] ${!isOpen ? 'bg-fill-secondary' : ''}`} 
-            variant="ghost" 
-            size="icon" 
-            onClick={handleToggle}
-          >
-            <PanelRightClose className={`w-5 h-5 text-black ${isOpen ? 'text-gray-500' : ''}`}/>
-          </Button>
-        )}
+        <Button 
+          className={`fixed top-4 right-4 z-[70] ${!isOpen ? 'bg-fill-secondary' : ''}`} 
+          variant="ghost" 
+          size="icon" 
+          onClick={handleToggle}
+        >
+          <PanelRightClose className={`w-5 h-5 text-black ${isOpen ? 'text-gray-500' : ''}`}/>
+        </Button>
         {!isOpen && showNewBadge && (
           <span className={`fixed mt-10 top-4 right-2 px-2 py-0.5 text-medium-12 font-medium rounded ${'bg-green-50 text-text-green'}`}>
             <span className="inline-block w-2 h-2 mr-1 bg-text-green text-medium-12 rounded-full"></span>

@@ -5,11 +5,14 @@ import Basic3DViewer from "@/components/sidebar/modules/molviewer/Basic3DViewer"
 import Smiles2DViewer from "@/components/sidebar/modules/molviewer/Smiles2DViewer"
 import { motion, AnimatePresence } from 'framer-motion'
 
-export const MoleculeViewer = () => {
+interface MoleculeViewerProps {
+  pdb: string;
+  smiles: string;
+}
+
+export const MoleculeViewer = ({ pdb, smiles }: MoleculeViewerProps) => {
   const [view, setView] = useState("2D");
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [dataPdb, setDataPdb] = useState("1ZRX");
-  const [dataSmiles, setDataSmiles] = useState("C1C[N+]2(CCC1[C@H](C2)OC(=O)C(C3=CC=CS3)(C4=CC=CS4)O)CCCOC5=CC=CC=C5");
   const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
@@ -35,14 +38,14 @@ export const MoleculeViewer = () => {
     return (
       <div className="absolute bottom-6 left-6 bg-surface-main backdrop-blur-sm rounded-md px-4 pt-2 w-[300px]">
         <h2 className="text-title text-text-primary">
-          {view === "3D" ? dataPdb : "Molecule"}
+          {view === "3D" ? pdb : "Molecule"}
         </h2>
         <p className="text-body-regular text-text-secondary">
           {view === "3D" 
             ? "Description of the 3D structure"
             : `SMILES: ${showMore 
-                ? `\n${dataSmiles}` 
-                : `${dataSmiles.slice(0, 20)}...`}`}
+                ? `\n${smiles}` 
+                : `${smiles.slice(0, 20)}...`}`}
         </p>
         <AnimatePresence>
           {showMore && (
@@ -103,17 +106,17 @@ export const MoleculeViewer = () => {
           </div>
           
           <div className="w-full h-[calc(100vh-80px)] relative">
-            {view === "3D" && dataPdb && (
+            {view === "3D" && pdb && (
               <Basic3DViewer 
                 className="w-full h-full" 
-                dataPdb={dataPdb}
+                dataPdb={pdb}
                 isFullscreen={isFullscreen}
               />
             )}
             {view === "2D" && (
               <div className="w-full h-full flex items-center justify-center">
                 <Smiles2DViewer 
-                  smiles={dataSmiles} 
+                  smiles={smiles} 
                   isFullscreen={isFullscreen}
                 />
               </div>
@@ -149,17 +152,17 @@ export const MoleculeViewer = () => {
         </div>
         
         <div className={`w-full relative ${isFullscreen ? 'h-[calc(100vh-80px)]' : 'h-[300px]'}`}>
-          {view === "3D" && dataPdb && (
+          {view === "3D" && pdb && (
             <Basic3DViewer 
               className="absolute inset-0 w-full h-full" 
-              dataPdb={dataPdb}
+              dataPdb={pdb}
               isFullscreen={isFullscreen}
             />
           )}
           {view === "2D" && (
             <div className="absolute inset-0 w-full h-full flex items-center justify-center">
               <Smiles2DViewer 
-                smiles={dataSmiles}
+                smiles={smiles}
                 isFullscreen={isFullscreen}
               />
             </div>

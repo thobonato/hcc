@@ -1,5 +1,16 @@
 {
     "statusCode": 200,
+    "molecule": {
+        "name": "Benzene",
+        "formula": "C6H6",
+        "smiles": "CC1CCC/C(C)=C1/C=C/C(C)=C/C=C/C(C)=C/C=C/C=C(C)/C=C/C=C(C)/C=C/C2=C(C)/CCCC2(C)C",
+        "pdb": "1BEN",
+        "information_module": {
+          "description": "The benzene molecule is composed of six carbon atoms joined in a planar hexagonal ring with one hydrogen atom attached to each[22A]. This compound is classified as Hydrocarbon.",
+          "additional_info": "Additional information about C6H6 includes its physical properties such as a melting point of 5.5°C and boiling point of 80.1°C at standard atmospheric pressure. The compound has a characteristic sweet aromatic odor and appears as a clear, colorless liquid at room temperature. It exhibits high chemical stability due to its conjugated ring structure, though it readily undergoes electrophilic aromatic substitution reactions. The molecule's planar hexagonal structure results in a highly symmetrical electron distribution, leading to its unique aromatic properties and reactivity patterns."
+        },
+        "classification": "Hydrocarbon"
+    },
     "body": {
       "[GHS] Acute Toxicity": {
         "prob": 83,
@@ -26,11 +37,11 @@
         "confidence": 0.25
       },
       "[GHS] STOT SE: Neurological Toxicity": {
-        "prob": 99,
+        "prob": 17,
         "confidence": 1.0
       },
       "[GHS] STOT SE: Liver Toxicity": {
-        "prob": 96,
+        "prob": 3,
         "confidence": 1.0
       },
       "[GHS] STOT SE: Cardiovascular Toxicity": {
@@ -58,11 +69,11 @@
         "confidence": 1.0
       },
       "Enzyme Activity": {
-        "prob": 99,
+        "prob": 52,
         "confidence": 1.0
       },
       "Ecological Activity": {
-        "prob": 1,
+        "prob": 50,
         "confidence": 1.0
       },
       "Mutagenicity": {

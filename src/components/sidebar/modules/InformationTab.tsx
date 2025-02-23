@@ -7,6 +7,7 @@ interface ChemicalInfo {
   description: string;
   classification: string;
   citations: { id: string; text: string; }[];
+  additional_info: string;
 }
 
 interface InformationTabProps {
@@ -36,15 +37,11 @@ const InformationTab: React.FC<InformationTabProps> = ({ chemicalInfo }) => {
               }}
               transition={{
                 height: { duration: 0.4, ease: "easeInOut" },
-                opacity: { 
-                  duration: 0.3, 
-                  ease: "easeInOut",
-                  delay: isExpanded ? 0 : 0.1
-                }
+                opacity: { duration: 0.3, ease: "easeInOut", delay: isExpanded ? 0 : 0.1 }
               }}
               className="text-body-regular block overflow-hidden"
             >
-              Additional information about {chemicalInfo.formula} includes its physical properties such as a melting point of 5.5°C and boiling point of 80.1°C at standard atmospheric pressure. The compound has a characteristic sweet aromatic odor and appears as a clear, colorless liquid at room temperature. It exhibits high chemical stability due to its conjugated ring structure, though it readily undergoes electrophilic aromatic substitution reactions. The molecule's planar hexagonal structure results in a highly symmetrical electron distribution, leading to its unique aromatic properties and reactivity patterns.
+              {chemicalInfo.additional_info}
             </motion.span>
           </p>
           
