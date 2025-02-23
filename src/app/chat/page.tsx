@@ -120,7 +120,8 @@ const ChatInterface = () => {
       {user && (
         <Settings 
           isOpen={isSettingsOpen}
-          onClose={() => setIsSettingsOpen(false)}
+          onClose={() => setIsSettingsOpen(false)
+          }
         />
       )}
 
@@ -128,6 +129,7 @@ const ChatInterface = () => {
         <Search 
           isOpen={isSearchOpen}
           onClose={() => setIsSearchOpen(false)}
+          onLoadChat={handleLoadChat}
         />
       )}
     </div>

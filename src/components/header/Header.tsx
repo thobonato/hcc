@@ -56,7 +56,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenSettings, onClickSearch, onClickN
 
       if (error) throw error;
       if (sessions) {
-        setFavorites(sessions.filter(chat => chat.is_favorite));
+        setFavorites(sessions.filter(chat => chat.is_favorite).slice(0, 3));
         setRecents(sessions.slice(0, 3));
       }
     } catch (error) {
@@ -208,7 +208,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenSettings, onClickSearch, onClickN
                     className="bg-fill-secondary-header gap-0 p-0 mt-1"
                     align="start"
                   >
-                    <h3 className="text-overline-small text-text-secondary font-medium px-2 pt-2">FAVORITES</h3>
+                    <h3 className="text-overline-small text-text-secondary font-medium px-2 pt-2 pb-1">FAVORITES</h3>
                     {favorites.map((item, index) => (
                       <React.Fragment key={index}>
                         <DropdownMenuItem 

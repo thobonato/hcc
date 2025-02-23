@@ -6,6 +6,7 @@ import ModelResponse from '@/components/chat/ModelResponse';
 import PromptInput from '@/components/chat/PromptInput';
 import { SettingsContext } from '@/components/header/settings/SettingsContext';
 import { useAuth } from '@/hooks/useAuth';
+import ModulePanel from '@/components/sidebar/modules/ModulePanel';
 
 interface Message {
     content: string;
@@ -36,6 +37,7 @@ const ChatPanel = () => {
     const { customInstructions } = useContext(SettingsContext);
     const { user, supabase } = useAuth();
     const searchParams = useSearchParams();
+    const [isOpen, setIsOpen] = useState(false);
 
     // Load chat session from URL parameter
     useEffect(() => {
@@ -249,59 +251,47 @@ const ChatPanel = () => {
         setIsLoading(false);
     };
 
+    const loadChatHistory = async () => {
+        if (!user?.email) return;
+
+        try {
+            const { data: sessions, error } = await supabase
+                .from('chat_sessions')
+                .select(`
+                    id,
+                    title,
+                    chat_messages (
+                        content,
+                        is_user,
+                        created_at
+                    )
+                `)
+                .eq('user_email', user.email)
+                .order('created_at', { ascending: false });
+
+            if (error) throw error;
+            if (!sessions) return;
+
+            const sortedSessions = sessions.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+            const sortedMessages = sortedSessions.map(session => session.chat_messages.map(msg => ({
+                content: msg.content,
+                timestamp: new Date(msg.created_at).toLocaleTimeString(),
+                isUser: msg.is_user
+            }))).flat();
+
+            setMessages(sortedMessages);
+        } catch (error) {
+            console.error('Error loading chat history:', error);
+        }
+    };
+
     return (
-        <div className="flex-1 flex flex-col h-full overflow-hidden relative">
-            <div className="flex-1 overflow-y-auto relative z-0">
-                <div className="px-12">
-                    {showLogo ? (
-                        <div className="flex justify-center pt-12">
-                            <a href="/chat">
-                                <Logo className="w-24 h-24 opacity-50"/>
-                            </a>
-                        </div>
-                    ) : (
-                        <div className="text-heading font-[500] tracking-tight pt-4 pb-8">
-                            {currentTitle}
-                        </div>
-                    )}
-                    
-                    <div className="max-w-[770px] mx-auto relative">
-                        {messages.map((message, index) => (
-                            message.isUser ? (
-                                <div key={index} className="pl-[270px]">
-                                    <UserMessage
-                                        content={message.content}
-                                        timestamp={message.timestamp}
-                                    />
-                                </div>
-                            ) : (
-                                <div key={index} className="pr-10">
-                                    <ModelResponse
-                                        content={message.content}
-                                        timestamp={message.timestamp}
-                                        onRegenerate={() => handleSubmit(index)}
-                                        onThumbsUp={() => console.log('Thumbs up')}
-                                        onThumbsDown={() => console.log('Thumbs down')}
-                                    />
-                                </div>
-                            )
-                        ))}
-                        {isLoading && (
-                            <div className="flex w-12 my-8 ml-1">
-                                <Logo className="w-12 h-12 opacity-50" playbackRate={2} stopLoop={false}/>
-                            </div>
-                        )}
-                        <div ref={messagesEndRef}/>
-                    </div>
-                </div>
-            </div>
-            
-            <div className="sticky bg-surface-background pt-4 bottom-0 z-0">
-                <PromptInput
-                    value={input}
-                    placeholder='Ask me anything...'
-                    onChange={setInput}
-                    onSubmit={() => handleSubmit()}
+        <div className="flex flex-1 overflow-hidden">
+            <div className={`flex flex-col transition-all duration-300 ${isOpen ? 'w-3/5' : 'w-full'}`}>
+                <ModulePanel 
+                    onOpenChange={(open) => setIsOpen(open)} 
+                    sessionId={currentSessionId}
+                    onFavoriteChange={loadChatHistory}
                 />
             </div>
         </div>

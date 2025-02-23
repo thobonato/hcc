@@ -17,6 +17,7 @@ import { useAuth } from '@/hooks/useAuth';
 interface ModulePanelProps {
   onOpenChange?: (open: boolean) => void;
   sessionId?: string;
+  onFavoriteChange?: () => void;
 }
 
 interface ApiResponse {
@@ -35,7 +36,7 @@ interface ApiResponse {
   endpoints: EndpointData[];
 }
 
-const ModulePanel = ({ onOpenChange, sessionId }: ModulePanelProps) => {
+const ModulePanel = ({ onOpenChange, sessionId, onFavoriteChange }: ModulePanelProps) => {
   const [isOpen, setIsOpen] = useState(true);
   const [value, setValue] = useState("modules");
   const [showNewBadge, setShowNewBadge] = useState(true);  // Control badge visibility
@@ -134,42 +135,42 @@ const ModulePanel = ({ onOpenChange, sessionId }: ModulePanelProps) => {
   // Load favorite status
   useEffect(() => {
     const loadFavoriteStatus = async () => {
-      if (!user?.email || !sessionId) return;
-
+      if (!sessionId || !user?.email) return;
+      
       try {
-        const { data: session } = await supabase
+        const { data, error } = await supabase
           .from('chat_sessions')
           .select('is_favorite')
           .eq('id', sessionId)
-          .eq('user_email', user.email)
           .single();
 
-        if (session) {
-          setIsFavorite(session.is_favorite);
-        }
+        if (error) throw error;
+        setIsFavorite(data?.is_favorite || false);
       } catch (error) {
         console.error('Error loading favorite status:', error);
       }
     };
 
     loadFavoriteStatus();
-  }, [sessionId, user?.email, supabase]);
+  }, [sessionId, user?.email]);
 
-  // Handle favorite toggle
   const handleFavoriteToggle = async () => {
-    if (!user?.email || !sessionId) return;
+    if (!sessionId || !user?.email) return;
 
     try {
-      await supabase
+      const newStatus = !isFavorite;
+      const { error } = await supabase
         .from('chat_sessions')
         .update({ 
-          is_favorite: !isFavorite,
+          is_favorite: newStatus,
           updated_at: new Date().toISOString()
         })
         .eq('id', sessionId)
         .eq('user_email', user.email);
 
-      setIsFavorite(!isFavorite);
+      if (error) throw error;
+      setIsFavorite(newStatus);
+      onFavoriteChange?.();
     } catch (error) {
       console.error('Error toggling favorite:', error);
     }
