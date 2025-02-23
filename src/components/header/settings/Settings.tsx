@@ -1,43 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AuthButton from '@/components/header/auth/AuthButton';
 import CursorTooltip from '@/components/initial/CursorTooltip';
-
+import { SettingsContext } from './SettingsContext';
+import { useAuth } from '@/hooks/useAuth';
 interface SettingsProps {
   isOpen: boolean;
   onClose: () => void;
-  userData?: {
-    fullName: string;
-    email: string;
-    birthday: {
-      month: string;
-      day: string;
-      year: string;
-    };
-    company: string;
-    occupation: string;
-  };
 }
 
-const Settings: React.FC<SettingsProps> = ({ 
-  isOpen, 
-  onClose, 
-  userData = {
-    fullName: 'Liam Fennell',
-    email: 'info@fennell.cv',
-    birthday: {
-      month: '03',
-      day: '15',
-      year: '2002'
-    },
-    company: 'OpenPurpose®',
-    occupation: 'Product Designer'
-  }
-}) => {
+const Settings: React.FC<SettingsProps> = ({ isOpen, onClose }) => {
+  const { settings, updateSettings } = useContext(SettingsContext);
   const [activeTab, setActiveTab] = useState<'account' | 'chat' | 'privacy' | 'tos'>('account');
-  const [formData, setFormData] = useState(userData);
+  const [formData, setFormData] = useState(settings);
   const [customInstructions, setCustomInstructions] = useState("You are a helpful chemistry assistant. Please use Markdown formatting in your responses to improve readability. Use **bold** for emphasis, *italics* for technical terms, `code blocks` for chemical formulas or equations, and ### headings to organize your responses. Include numbered lists and bullet points where appropriate. Be thorough and detailed in your explanations.");
   const [hasChanges, setHasChanges] = useState(false);
+  const { user } = useAuth();
   
   useEffect(() => {
     const handleEscapeKey = (event: KeyboardEvent) => {
@@ -56,44 +34,18 @@ const Settings: React.FC<SettingsProps> = ({
   }, [isOpen, onClose]);
 
   useEffect(() => {
-    setFormData(userData);
-  }, [userData]);
+    setFormData(settings);
+  }, [settings]);
 
   const handleSave = async () => {
-    try {
-      const settingsData = {
-        account: {
-          ...formData
-        },
-        chat: {
-          customInstructions
-        }
-      };
-
-      const response = await fetch('/api/settings', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(settingsData)
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to save settings');
-      }
-
-      setHasChanges(false);
-      console.log('Settings saved successfully');
-    } catch (error) {
-      console.error('Error saving settings:', error);
-      // Optionally add error handling UI feedback here
-    }
+    await updateSettings(formData);
+    setHasChanges(false);
   };
 
-  const handleInputChange = (field: string, value: string) => {
+  const handleChange = (field: string, value: any) => {
     setFormData(prev => {
       const newData = { ...prev, [field]: value };
-      setHasChanges(true);
+      setHasChanges(JSON.stringify(newData) !== JSON.stringify(settings));
       return newData;
     });
   };
@@ -124,7 +76,7 @@ const Settings: React.FC<SettingsProps> = ({
         <input
           type="text"
           value={formData.fullName}
-          onChange={(e) => handleInputChange('fullName', e.target.value)}
+          onChange={(e) => handleChange('fullName', e.target.value)}
           className="w-full p-3 bg-surface-main rounded-lg text-body-regular text-text-primary focus:outline-none"
         />
       </div>
@@ -133,7 +85,7 @@ const Settings: React.FC<SettingsProps> = ({
         <label className="block text-overline text-text-secondary mb-2">EMAIL</label>
         <input
           type="email"
-          value={formData.email}
+          value={user?.user_metadata?.email || ''}
           disabled={true}
           className="w-full p-3 bg-surface-main rounded-lg text-body-regular text-text-secondary focus:outline-none"
         />
@@ -157,8 +109,8 @@ const Settings: React.FC<SettingsProps> = ({
         <input
           type="text"
           value={formData.company}
-          onChange={(e) => handleInputChange('company', e.target.value)}
-          className="w-full p-3 bg-surface-main rounded-sm text-body-regular text-text-secondary focus:outline-none"
+          onChange={(e) => handleChange('company', e.target.value)}
+          className="w-full p-3 bg-surface-main rounded-sm text-body-regular text-text-primary focus:outline-none"
         />
       </div>
 
@@ -167,8 +119,8 @@ const Settings: React.FC<SettingsProps> = ({
         <input
           type="text"
           value={formData.occupation}
-          onChange={(e) => handleInputChange('occupation', e.target.value)}
-          className="w-full p-3 bg-surface-main rounded-sm text-body-regular text-text-secondary focus:outline-none"
+          onChange={(e) => handleChange('occupation', e.target.value)}
+          className="w-full p-3 bg-surface-main rounded-sm text-body-regular text-text-primaary focus:outline-none"
         />
       </div>
 

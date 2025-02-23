@@ -23,12 +23,16 @@ const ChatInterface = () => {
   const [isMobile, setIsMobile] = useState(false);
 
   const openNewChat = () => {
-    window.location.reload();
+    window.location.href = '/chat';
   };
 
   const handleSubmit = (value: string) => {
     setIsLoading(true);
     setInput(value);
+  };
+
+  const handleLoadChat = (sessionId: string) => {
+    setIsFirstPrompt(false);
   };
 
   // Get header height after mount
@@ -80,6 +84,7 @@ const ChatInterface = () => {
           onOpenSettings={() => setIsSettingsOpen(true)}
           onClickSearch={() => setIsSearchOpen(true)}
           onClickNewChat={() => openNewChat()}
+          onLoadChat={handleLoadChat}
         />
       </div>
 
@@ -116,17 +121,6 @@ const ChatInterface = () => {
         <Settings 
           isOpen={isSettingsOpen}
           onClose={() => setIsSettingsOpen(false)}
-          userData={{
-            fullName: user?.user?.user_metadata?.full_name || '',
-            email: user?.user?.user_metadata?.email || '',
-            birthday: {
-              month: '03',
-              day: '15',
-              year: '2002'
-            },
-            company: '',
-            occupation: ''
-          }}
         />
       )}
 

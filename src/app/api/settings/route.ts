@@ -1,59 +1,70 @@
+import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
 
-const SETTINGS_FILE = path.join(process.cwd(), 'src', 'app', 'data', 'settings.json');
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
-// Ensure the data directory exists
-const ensureDirectory = () => {
-  const dir = path.join(process.cwd(), 'src', 'app', 'data');
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
-};
-
-export const GET = async () => {
+export async function GET(request: Request) {
   try {
-    ensureDirectory();
-    
-    if (!fs.existsSync(SETTINGS_FILE)) {
-      // Create default settings if file doesn't exist
-      const defaultSettings = {
-        account: {
-          name: "",
-          email: "",
-          organization: "",
-          role: ""
-        },
-        chat: {
-          customInstructions: "You are a helpful chemistry assistant."
-        }
-      };
-      fs.writeFileSync(SETTINGS_FILE, JSON.stringify(defaultSettings, null, 2));
-      return NextResponse.json(defaultSettings);
+    const { searchParams } = new URL(request.url);
+    const userEmail = searchParams.get('email');
+
+    if (!userEmail) {
+      return NextResponse.json({ error: 'User email required' }, { status: 400 });
     }
-    
-    const settings = JSON.parse(fs.readFileSync(SETTINGS_FILE, 'utf-8'));
-    return NextResponse.json(settings);
+
+    const { data: settings, error } = await supabase
+      .from('user_settings')
+      .select()
+      .eq('user_email', userEmail)
+      .single();
+
+    if (error && error.code !== 'PGRST116') { // Ignore "not found" errors
+      throw error;
+    }
+
+    return NextResponse.json({ settings: settings || null });
   } catch (error) {
     console.error('Error reading settings:', error);
-    return NextResponse.json({ message: 'Error reading settings' }, { status: 500 });
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
-export const POST = async (request: Request) => {
+export async function POST(request: Request) {
   try {
-    ensureDirectory();
-    
-    // Get the request body
-    const data = await request.json();
-    
-    // Write the settings to the JSON file
-    fs.writeFileSync(SETTINGS_FILE, JSON.stringify(data, null, 2));
-    
-    return NextResponse.json({ message: 'Settings saved successfully' }, { status: 200 });
+    const body = await request.json();
+    const { user_email, ...settings } = body;
+
+    if (!user_email) {
+      return NextResponse.json({ error: 'User email required' }, { status: 400 });
+    }
+
+    const { data: existingSettings } = await supabase
+      .from('user_settings')
+      .select()
+      .eq('user_email', user_email)
+      .single();
+
+    if (existingSettings) {
+      const { error } = await supabase
+        .from('user_settings')
+        .update(settings)
+        .eq('user_email', user_email);
+
+      if (error) throw error;
+    } else {
+      const { error } = await supabase
+        .from('user_settings')
+        .insert([{ user_email, ...settings }]);
+
+      if (error) throw error;
+    }
+
+    return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error saving settings:', error);
-    return NextResponse.json({ message: 'Error saving settings' }, { status: 500 });
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 } 

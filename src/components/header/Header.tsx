@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, File, Star, Clock } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import CursorTooltip from '@/components/header/CursorTooltipHeader';
@@ -14,26 +14,83 @@ import HoverDropdownMenu from '@/components/header/HoverDropdownMenu';
 import AuthButton from './auth/AuthButton';
 import { useAuth } from '@/hooks/useAuth';
 import DisabledToolTip from '@/components/initial/DisabledToolTip';
+import { useRouter } from 'next/navigation';
 
 interface HeaderProps {
   onOpenSettings: () => void;
   onClickSearch: () => void;
   onClickNewChat: () => void;
+  onLoadChat?: (sessionId: string) => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ onOpenSettings, onClickSearch, onClickNewChat }) => {
-  const { user } = useAuth();
-  const [favorites] = useState([
-    'TRCA hybrid requires bonding t...',
-    'Polymer needed to make compl...',
-    'UICG test against TRSA finds th...'
-  ]);
+interface ChatHistory {
+  id: string;
+  title: string;
+  is_favorite: boolean;
+  created_at: string;
+  chat_messages: {
+    content: string;
+    is_user: boolean;
+    created_at: string;
+  }[];
+}
 
-  const [recents] = useState([
-    'TRCA hybrid requires bonding t...',
-    'Polymer needed to make compl...',
-    'UICG test against TRSA finds th...'
-  ]);
+const Header: React.FC<HeaderProps> = ({ onOpenSettings, onClickSearch, onClickNewChat, onLoadChat }) => {
+  const { user, supabase } = useAuth();
+  const [favorites, setFavorites] = useState<ChatHistory[]>([]);
+  const [recents, setRecents] = useState<ChatHistory[]>([]);
+  const router = useRouter();
+
+  const loadChatHistory = async () => {
+    if (!user?.email) return;
+    try {
+      const { data: sessions, error } = await supabase
+        .from('chat_sessions')
+        .select(`
+          id, title, is_favorite, created_at,
+          chat_messages (content, is_user, created_at)
+        `)
+        .eq('user_email', user.email)
+        .order('created_at', { ascending: false })
+        .limit(10);
+
+      if (error) throw error;
+      if (sessions) {
+        setFavorites(sessions.filter(chat => chat.is_favorite));
+        setRecents(sessions.slice(0, 3));
+      }
+    } catch (error) {
+      console.error('Error loading chat history:', error);
+    }
+  };
+
+  useEffect(() => {
+    loadChatHistory();
+  }, [user?.email, supabase]);
+
+  const toggleFavorite = async (id: string, isFavorite: boolean) => {
+    try {
+      await fetch('/api/supabase', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'toggleFavorite',
+          data: { id, is_favorite: isFavorite }
+        })
+      });
+
+      await loadChatHistory();
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+    }
+  };
+
+  const handleChatClick = (sessionId: string) => {
+    if (onLoadChat) {
+      onLoadChat(sessionId);
+    }
+    router.push(`/chat?session=${sessionId}`);
+  };
 
   return (
     <header className="w-full bg-surface-background z-50">
@@ -58,7 +115,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenSettings, onClickSearch, onClickN
                     />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-fill-secondary gap-0 p-0 mt-1.5" 
+                <DropdownMenuContent className="bg-fill-secondary-header gap-0 p-0 mt-1.5" 
                   align="start"
                 >
                   {/* User email display */}
@@ -122,7 +179,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenSettings, onClickSearch, onClickN
                 >
                   <File className="h-5 w-5" />
                   <div className="absolute z-50 top-full left-1/2 -translate-x-1/2 pt-2">
-                    <div className="pointer-events-none bg-fill-secondary text-xs text-text-secondary px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-150 whitespace-nowrap">
+                    <div className="pointer-events-none bg-fill-secondary-header text-xs text-text-secondary px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-150 whitespace-nowrap">
                       New Chat
                     </div>
                   </div>
@@ -131,7 +188,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenSettings, onClickSearch, onClickN
             </div>
 
             {/* Favorites & Recents */}
-            <div className='bg-fill-secondary rounded-md flex'>
+            <div className='bg-fill-secondary-header rounded-md flex'>
               {/* Favorites section */}
               <DisabledToolTip 
                 message="Please login to access"
@@ -148,14 +205,17 @@ const Header: React.FC<HeaderProps> = ({ onOpenSettings, onClickSearch, onClickN
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent 
-                    className="bg-fill-secondary gap-0 p-0 mt-1"
+                    className="bg-fill-secondary-header gap-0 p-0 mt-1"
                     align="start"
                   >
                     <h3 className="text-overline-small text-text-secondary font-medium px-2 pt-2">FAVORITES</h3>
                     {favorites.map((item, index) => (
                       <React.Fragment key={index}>
-                        <DropdownMenuItem className="py-1 text-text-primary bg-fill-secondary-header hover:bg-border-header">
-                          {item}
+                        <DropdownMenuItem 
+                          className="py-1 text-text-primary bg-fill-secondary-header hover:bg-border-header"
+                          onClick={() => handleChatClick(item.id)}
+                        >
+                          {item.title}
                         </DropdownMenuItem>
                         {index < favorites.length - 1 && 
                           <DropdownMenuSeparator className='bg-border-header -mx-0 my-0'/>
@@ -182,14 +242,17 @@ const Header: React.FC<HeaderProps> = ({ onOpenSettings, onClickSearch, onClickN
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent 
-                    className="bg-fill-secondary gap-0 p-0 mt-1"
+                    className="bg-fill-secondary-header gap-0 p-0 mt-1"
                     align="start"
                   >
                     <h3 className="text-overline-small text-text-secondary font-medium px-2 pt-2 pb-1">RECENTS</h3>
                     {recents.map((item, index) => (
                       <React.Fragment key={index}>
-                        <DropdownMenuItem className="py-1 text-text-primary bg-fill-secondary-header hover:bg-border-header">
-                          {item}
+                        <DropdownMenuItem 
+                          className="py-1 text-text-primary bg-fill-secondary-header hover:bg-border-header"
+                          onClick={() => handleChatClick(item.id)}
+                        >
+                          {item.title}
                         </DropdownMenuItem>
                         {index < recents.length - 1 && 
                           <DropdownMenuSeparator className='bg-border-header -mx-0 my-0'/>

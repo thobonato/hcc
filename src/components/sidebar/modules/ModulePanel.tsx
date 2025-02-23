@@ -12,9 +12,11 @@ import AnimatedTabs from "@/components/sidebar/modules/AnimatedTabs";
 import type { TabOption } from "@/lib/types"
 import InformationTab from "@/components/sidebar/modules/InformationTab";
 import { EndpointData } from '@/components/sidebar/modules/DataTable'
+import { useAuth } from '@/hooks/useAuth';
 
 interface ModulePanelProps {
   onOpenChange?: (open: boolean) => void;
+  sessionId?: string;
 }
 
 interface ApiResponse {
@@ -33,12 +35,14 @@ interface ApiResponse {
   endpoints: EndpointData[];
 }
 
-const ModulePanel = ({ onOpenChange }: ModulePanelProps) => {
+const ModulePanel = ({ onOpenChange, sessionId }: ModulePanelProps) => {
   const [isOpen, setIsOpen] = useState(true);
   const [value, setValue] = useState("modules");
   const [showNewBadge, setShowNewBadge] = useState(true);  // Control badge visibility
   const [apiData, setApiData] = useState<ApiResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const { user, supabase } = useAuth();
 
   const tabs: TabOption[] = [
     {
@@ -127,6 +131,50 @@ const ModulePanel = ({ onOpenChange }: ModulePanelProps) => {
     fetchData();
   }, []);
 
+  // Load favorite status
+  useEffect(() => {
+    const loadFavoriteStatus = async () => {
+      if (!user?.email || !sessionId) return;
+
+      try {
+        const { data: session } = await supabase
+          .from('chat_sessions')
+          .select('is_favorite')
+          .eq('id', sessionId)
+          .eq('user_email', user.email)
+          .single();
+
+        if (session) {
+          setIsFavorite(session.is_favorite);
+        }
+      } catch (error) {
+        console.error('Error loading favorite status:', error);
+      }
+    };
+
+    loadFavoriteStatus();
+  }, [sessionId, user?.email, supabase]);
+
+  // Handle favorite toggle
+  const handleFavoriteToggle = async () => {
+    if (!user?.email || !sessionId) return;
+
+    try {
+      await supabase
+        .from('chat_sessions')
+        .update({ 
+          is_favorite: !isFavorite,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', sessionId)
+        .eq('user_email', user.email);
+
+      setIsFavorite(!isFavorite);
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+    }
+  };
+
   const renderModuleContent = (module: Module) => {
     if (isLoading || !apiData) return <div>Loading...</div>;
 
@@ -186,7 +234,14 @@ const ModulePanel = ({ onOpenChange }: ModulePanelProps) => {
               <div className="px-4 pt-4 flex justify-between items-center">
                 <div className="flex items-center gap-2">
                   <h1 className="text-heading font-[500] tracking-tight">BENZENE</h1>
-                  <Star className="w-4 h-4" />
+                  <button 
+                    onClick={handleFavoriteToggle}
+                    className="focus:outline-none"
+                  >
+                    <Star 
+                      className={`w-4 h-4 ${isFavorite ? 'fill-current text-yellow-400' : ''}`} 
+                    />
+                  </button>
                 </div>
               </div>
 

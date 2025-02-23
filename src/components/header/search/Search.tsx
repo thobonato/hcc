@@ -57,7 +57,7 @@ const Search: React.FC<SearchProps> = ({ isOpen, onClose }) => {
         return filteredItems.map((item, index) => (
             <div 
                 key={index} 
-                className="flex justify-between items-center py-1 px-4 border-b border-border-default hover:bg-fill-secondary cursor-pointer"
+                className="flex justify-between items-center py-1 px-4 border-b border-border-default hover:bg-fill-secondary-header cursor-pointer"
             >
                 <span className="text-text-primary">{item.title}</span>
                 <span className="text-text-secondary text-sm">{item.timestamp}</span>
