@@ -177,7 +177,11 @@ const ModulePanel = ({ onOpenChange, sessionId, onFavoriteChange }: ModulePanelP
   };
 
   const renderModuleContent = (module: Module) => {
-    if (isLoading || !apiData) return <div>Loading...</div>;
+    if (isLoading || !apiData) return (
+      <div className="flex flex-col items-center justify-center h-full">
+        <div className="w-12 h-12 animate-spin rounded-full border-2 border-gray-200 border-t-gray-500 my-6"/>
+      </div>
+    );
 
     switch (module.name) {
       case 'Visuals':

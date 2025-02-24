@@ -244,7 +244,7 @@ const Settings: React.FC<SettingsProps> = ({ isOpen, onClose }) => {
                 <hr className='text-border-default'/>
                 <div className="mt-2 flex items-center gap-2 px-3">
                   <div className="w-2 h-2 bg-black rounded-full"></div>
-                  <span className="text-body-regular text-text-primary">{formData.email}</span>
+                  <span className="text-body-regular text-text-primary">{user?.user_metadata?.email}</span>
                 </div>
 
                 <div className="pt-2 text-body-regular">
