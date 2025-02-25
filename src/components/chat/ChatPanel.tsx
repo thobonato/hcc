@@ -232,9 +232,30 @@ const ChatPanel = () => {
             return;
         }
 
-        // Update title if this is the first message
+        // Generate and update title if this is the first message
+        // Use GPT for it
         if (messages.length === 0) {
-            await updateChatTitle(sessionId, input);
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: `Generate a short, descriptive title (3-5 words) for this chat based on this first message: "${input}"`,
+                        conversationHistory: [],
+                        generatingTitle: true
+                    })
+                });
+                const data = await response.json();
+                const generatedTitle = data.message.replace(/["']/g, '').trim();
+                await updateChatTitle(sessionId, generatedTitle);
+            } catch (error) {
+                console.error('Error generating chat title:', error);
+                // Fallback to input-based title if generation fails
+                const titleCase = input.split(' ')
+                    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                    .join(' ');
+                await updateChatTitle(sessionId, titleCase);
+            }
         }
 
         // Save user message

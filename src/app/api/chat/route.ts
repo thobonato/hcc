@@ -8,18 +8,18 @@ const openai = new OpenAI({
 
 export async function POST(request: Request) {
     try {
-        const { message, conversationHistory } = await request.json();
+        const { message, conversationHistory, generatingTitle = false } = await request.json();
 
         // Get custom instructions directly from imported settings
         const customInstructions = settings.chat.customInstructions;
 
         // Prepare the messages array for the API
         const messages = [
-            // System message with custom instructions
-            {
+            // System message with custom instructions, only if not generating title
+            ...(generatingTitle ? [] : [{
                 role: 'system',
                 content: customInstructions
-            },
+            }]),
             // Previous conversation history
             ...conversationHistory,
             // Current user message
