@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Human Chemical Co.
+
+A web application for chemistry analysis featuring interactive 2D/3D molecular visualizations and AI-assisted chemical information.
+
+## Features
+
+- **Interactive Molecule Visualization**: View chemical structures in both 2D and 3D, with fullscreen support
+- **AI Chat Interface**: Get information and insights about chemical compounds
+- **Comprehensive Chemical Data**: Access chemical properties, endpoint information, and citations
+- **User Authentication**: Google OAuth login with personalized settings
+- **Chat History**: Save and search through previous conversations
+
+## Tech Stack
+
+- **Frontend**: Next.js, React, Tailwind CSS, Framer Motion
+- **Visualization**: 3Dmol.js, SmilesDrawer
+- **Backend**: Supabase, OpenAI API
+- **Authentication**: Google OAuth via Supabase
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js (v16+)
+- npm or yarn
+- Supabase account
+- OpenAI API key
+- Google OAuth credentials
+
+### Installation
+
+1. Clone the repository
+```bash
+git clone https://github.com/thobonato/hcc.git
+cd hcc
+```
+
+2. Install dependencies
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Set up environment variables
+```bash
+touch .env.local
+
+# in .env.local
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+OPENAI_API_KEY=your_openai_api_key
+```
+
+4. Run dev server
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Open http://localhost:3000 in your browser
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Database Setup
+The application uses Supabase with the following tables:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- user_settings: Store user preferences
+- chat_sessions: Store chat history metadata
+- chat_messages: Store individual chat messages
 
-## Learn More
+License
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Acknowledgements
+- Built with [Next.js](https://nextjs.org/)
+- 3D visualization powered by [3Dmol.js](https://github.com/3dmol)
+- 2D structure rendering by [SmilesDrawer](https://github.com/reymond-group/smilesDrawer)
