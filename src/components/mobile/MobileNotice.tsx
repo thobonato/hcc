@@ -18,16 +18,17 @@ const MobileNotice = () => {
         </h1>
         
         {/* Placeholder for demo video - replace src with actual video */}
-        <div className="w-full max-w-2xl aspect-video bg-fill-secondary rounded-lg my-12">
-          {/* <video 
-            className="w-full h-full object-cover"
+        <div className="w-full max-w-2xl aspect-video bg-transparent rounded-lg my-12">
+          <video 
+            className="w-full h-full object-cover object-center"
             playsInline
             muted
             autoPlay
             loop
+            style={{ width: '100%', height: '100%' }}
           >
-            <source src="/placeholder-demo.mp4" type="video/mp4" />
-          </video> */}
+            <source src="demo.mp4" type="video/mp4" />
+          </video>
         </div>
 
         <p className="text-lg text-text-secondary">
